@@ -13,7 +13,7 @@
 <sliver_type xmlns="http://www.geni.net/resources/rspec/3" name="default-vm"/>
 <services xmlns="http://www.geni.net/resources/rspec/3">
 <execute xmlns="http://www.geni.net/resources/rspec/3" command="sudo apt update" shell="/bin/sh"/>
-<execute xmlns="http://www.geni.net/resources/rspec/3" command="sudo apt dist-upgrade" shell="/bin/sh"/>
+<execute xmlns="http://www.geni.net/resources/rspec/3" command="sudo apt dist-upgrade -y" shell="/bin/sh"/>
 </services>
 <interface xmlns="http://www.geni.net/resources/rspec/3" client_id="interface-server"/>
 </node>
