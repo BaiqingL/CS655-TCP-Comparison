@@ -28,11 +28,11 @@ public class ViewServer {
             // assume the first 2 connections are from 2 players for publishing game moves
             int i = 0;
             for (i = 0; i < 2; i++) { // for each player
-                Socket connectionSock = serverSock.accept();
-                this.socketList[i] = connectionSock;
+                Socket conSock = serverSock.accept();
+                this.socketList[i] = conSock;
                 System.out.println("Player " + Integer.toString(i+1) + " connected successfully.");
                 if (i == 0) { // one PubHandler provides enough information for game
-                    PubHandler handler = new PubHandler(connectionSock, this.socketList, playerID);
+                    PubHandler handler = new PubHandler(conSock, this.socketList, playerID);
                     Thread theThread = new Thread(handler);
                     theThread.start();
                 }
@@ -44,6 +44,10 @@ public class ViewServer {
                 this.socketList[i] = conViewSock;
                 System.out.println("Viewer " + Integer.toString(i-1) + " connected successfully.");
 
+                CommentHandler handler = new CommentHandler(conViewSock, this.socketList, playerID);
+                Thread theThread = new Thread(handler);
+                theThread.start();
+
                 // SubHandler handler = new SubHandler(connectionSock, this.socketList, playerID);
                 // Thread theThread = new Thread(handler);
                 // theThread.start();
@@ -51,7 +55,7 @@ public class ViewServer {
             }
 
             System.out.println("View Server running...");
-            Socket connectionSockt = serverSock.accept(); // change/add code for more viewers
+            Socket conSockt = serverSock.accept(); // change/add code for more viewers
 
             for (i = 0; i < this.socketList.length; ++i) {
                  if (socketList[i] != null) socketList[i].close();

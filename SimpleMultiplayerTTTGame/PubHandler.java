@@ -37,11 +37,11 @@ public class PubHandler implements Runnable {
 			}
 			// Get data sent from the player
 			String serverText = serverInput.readLine();
-            // broardcast it to viewers
+            // broadcast it to viewers
 			broadcastMessage(serverText + "\n");
 		}
 	} catch (Exception e) {
-		System.out.println("Error: " + e.toString());
+		System.out.println("Error: " + e);
 	}
   }
 
@@ -58,7 +58,7 @@ public class PubHandler implements Runnable {
          }
 	 //System.out.println("broadcast (" + i + "): " + message);
          i++;
-      } // while
+      }
     } catch (IOException e) {
         System.out.println(e.getMessage());
     }

@@ -40,7 +40,7 @@ public class GameServer {
                 Thread theThread = new Thread(handler);
                 theThread.start();
                 playerID -= 2;
-            } // for
+            }
 
             System.out.println("Game running...");
 
@@ -80,5 +80,5 @@ public class GameServer {
 
         GameServer server = new GameServer(viewHostname, viewPort);
         server.getConnection(port);
-    } // main()
-} // Game Server
+    }
+}

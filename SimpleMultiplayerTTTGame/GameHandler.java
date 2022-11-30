@@ -1,5 +1,4 @@
-// Tic Tac Toe Game Handler
-// sends input prompts for move to player (client), receives the input from client,
+// Tic Tac Toe Game Handler sends input prompts for move to player (client), receives the input from client,
 // plays game by the move according to the input, and sends updated game board to client
 
 import java.net.*;
@@ -9,7 +8,7 @@ import java.lang.*;
 
 public class GameHandler implements Runnable {
 
-  public Socket connectionSock;
+  public Socket conSock;
   public Socket[] socketList;
   public TTTgame game;
   public int playerID;
@@ -18,7 +17,7 @@ public class GameHandler implements Runnable {
   int viewPort;
 
   public GameHandler(Socket sock,Socket[] socketList, TTTgame game, int playerID, String viewHost, int viewPort) {
-    this.connectionSock = sock;
+    this.conSock = sock;
     this.socketList = socketList;	// Keep reference to master list
     this.game = game;
     this.playerID = playerID;
@@ -28,34 +27,57 @@ public class GameHandler implements Runnable {
 
   public void run() {
     try {
-      BufferedReader playerInput = new BufferedReader(new InputStreamReader(this.connectionSock.getInputStream()));
+      BufferedReader inputFromPlayer = new BufferedReader(new InputStreamReader(this.conSock.getInputStream()));
 
       this.viewSock = new Socket(this.viewHostname, this.viewPort);
+      String playerSymbol = "X";
+      boolean timeCounted = true;
+      boolean gameStarted = false;
+      long startMoveTime = 0;
+      long endMoveTime = 0;
 
       switch (this.playerID) {
         case -1:
-          sendMessage("\nYou are player 'O', you will go second." + "\r\n");
+          sendMessage("You are player 'O', you will go second." + "\r\n");
+          playerSymbol = "O";
           break;
         case 1:
-          sendMessage("\nYou are player 'X', you will go first." + "\r\n");
+          sendMessage("You are player 'X', you will go first." + "\r\n");
+          playerSymbol = "X";
           break;
         default:
           break;
       }
 
       while (this.game.checkWin() == 0) {
-        sendMessage(this.game.printState() + "\r\n");
-        sendMessageToView(this.game.printState() + "\r\n"); // message to view
+        sendMessage(playerSymbol + this.game.printState() + "\r\n");
+        long timeStamp = System.currentTimeMillis(); 
+        String timeStampStr = playerSymbol + "#" + Long.toString(timeStamp) + ";";
+        sendMessageToView(timeStampStr + this.game.printState() + "\r\n"); // message with timeStamp to view
 
         if (this.game.playerMove == this.playerID) {
           // my turn
+          if (timeCounted && gameStarted) { // Time for Invalid move is counted, time for first move is not counted
+              startMoveTime = System.currentTimeMillis();  
+              timeCounted = false;
+          }
           sendMessage("Please enter a row (0-2): " + "\r\n");
-          String row = playerInput.readLine().trim();
+          String row = inputFromPlayer.readLine().trim();
           sendMessage("Please enter a column (0-2): " + "\r\n");
-          String col = playerInput.readLine().trim();
+          String col = inputFromPlayer.readLine().trim();
           if (!(this.game.submitMove(Integer.parseInt(row), Integer.parseInt(col)))) {
             sendMessage("Invalid move." + "\r\n");
-          } 
+          } else { // moved 
+            if (!gameStarted) {
+                gameStarted = true;
+            } else {
+               endMoveTime = System.currentTimeMillis(); 
+               long timeUsed = endMoveTime - startMoveTime;
+               long timeTotal = this.game.countTime(timeUsed, this.playerID);
+               sendMessage("Time used in this move: " + timeUsed + "(ms), Total time used: " + timeTotal + "(ms)\n");
+               timeCounted = true;
+            }
+          }
         } else {
           // other player's turn
           sendMessage("Please wait for opponent's move." + "\r\n");
@@ -65,8 +87,10 @@ public class GameHandler implements Runnable {
         }
       }
 
-      sendMessage(this.game.printState());
-      sendMessageToView(this.game.printState() + "\r\n"); // message to view
+      sendMessage(playerSymbol + this.game.printState());
+      long timeStamp = System.currentTimeMillis(); 
+      String timeStampStr = playerSymbol + "#" + Long.toString(timeStamp) + ";";
+      sendMessageToView(timeStampStr + this.game.printState() + "\r\n"); // message with timeStamp to view
 
       int checkResult = this.game.checkWin();
       sendMessage(Integer.toString(checkResult) + "\r\n");
@@ -86,8 +110,8 @@ public class GameHandler implements Runnable {
 
   private void sendMessage(String message) { 
       try {
-          DataOutputStream clientOutput = new DataOutputStream(this.connectionSock.getOutputStream());
-          clientOutput.writeBytes(message);
+          DataOutputStream outputToPlayer = new DataOutputStream(this.conSock.getOutputStream());
+          outputToPlayer.writeBytes(message);
 	    //System.out.println(message);
       } catch (IOException e) {
           System.out.println(e.getMessage());
@@ -96,8 +120,8 @@ public class GameHandler implements Runnable {
 
   private void sendMessageToView(String message) { 
       try {
-          DataOutputStream clientOutput = new DataOutputStream(this.viewSock.getOutputStream());
-          clientOutput.writeBytes(message);
+          DataOutputStream outputToViewServer = new DataOutputStream(this.viewSock.getOutputStream());
+          outputToViewServer.writeBytes(message);
 	    //System.out.println(message);
       } catch (IOException e) {
           System.out.println(e.getMessage());

@@ -9,32 +9,44 @@ import java.util.Scanner;
 import java.util.ArrayList;
 
 public class ViewReceiver implements Runnable {
-    private Socket connectionSock = null;
+    private Socket conSock = null;
     public TTTgame game;
 
     ViewReceiver(Socket sock, TTTgame game) {
-        this.connectionSock = sock;
+        this.conSock = sock;
         this.game = game;
     }
 
     public void run() {
         // Wait for data from the server.  If received, output it.
         try {
-            BufferedReader serverInput = new BufferedReader(new InputStreamReader(this.connectionSock.getInputStream()));
+            BufferedReader inputFromServer = new BufferedReader(new InputStreamReader(this.conSock.getInputStream()));
             while (true) {
-                if (serverInput == null) {
+                if (inputFromServer == null) {
                     // Connection issue
-                    System.out.println("Closing connection for socket " + connectionSock);
-                    connectionSock.close();
+                    System.out.println("Closing connection for socket " + conSock);
+                    conSock.close();
                     break;
                 }
                 // Get data sent from the server
-                String serverText = serverInput.readLine();
+                String serverText = inputFromServer.readLine();
 
-                System.out.println(serverText);
+                //System.out.println(serverText);
 
-                if (serverText.startsWith("#")) {
-                    this.game.printBoard(serverText.substring(1));
+                if (serverText.startsWith("X#") || serverText.startsWith("O#") ) {
+                    // get time stamp and compute network delay for broadcast
+                    String[] lines = serverText.substring(2).split(";");
+                    // System.out.println(serverText);
+                    // System.out.println("timeStamp: " + lines[0]);
+                    // System.out.println( serverText.substring(3+lines[0].length()) );
+                    long timeStamp = Long.parseLong(lines[0]); // timeStamp = time starting to broadcast
+                    long currentTime = System.currentTimeMillis(); 
+
+                    this.game.printBoard(serverText.substring(3+lines[0].length()));
+                    System.out.println("Game broadcast delay: " + (currentTime - timeStamp) );
+                } else if (serverText.startsWith("!")) {
+                    conSock.close();
+                    break;
                 } else {
                     System.out.println(serverText);
                 }

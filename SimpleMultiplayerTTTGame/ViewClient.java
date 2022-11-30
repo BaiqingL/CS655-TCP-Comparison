@@ -38,53 +38,29 @@ public class ViewClient {
             System.out.println("Connecting to game view server on port " + port);
             Socket conSock = new Socket(hostname, port);
             TTTgame game = new TTTgame();
-            DataOutputStream serverOutput = new DataOutputStream(conSock.getOutputStream());
+            DataOutputStream   outputToServer = new DataOutputStream(conSock.getOutputStream());
 
-            System.out.println("Connection established (ConSocket): " + conSock);
+            System.out.println("Connection established, viewer can comment.");
 
             // Start a thread to listen and display data received from view server
-            //ViewReceiver listener = new ViewReceiver(conSock, game);
-            //Thread theThread = new Thread(listener);
-            //theThread.start();
+            ViewReceiver receiver = new ViewReceiver(conSock, game);
+            Thread theThread = new Thread(receiver);
+            theThread.start();
 
-            BufferedReader serverInput = new BufferedReader(new InputStreamReader(conSock.getInputStream()));
-            //System.out.println("serverInput: " + serverInput);
-            while (true) {
-                if (serverInput == null) {
-                    // Connection issue
-                    System.out.println("Closing connection for socket " + conSock);
-                    conSock.close();
-                    break;
-                }
-                // Get data sent from the server
-                // System.out.println("serverInput.readLine(): ");
-                String serverText = serverInput.readLine();
-
-                // System.out.println(serverText);
-
-                if (serverText.startsWith("#")) {
-                    game.printBoard(serverText.substring(1));
-                } else {
-                    System.out.println(serverText);
-                }
-            } // while
-
-            // Read input from the keyboard and send it to everyone else.
-            // The only way to quit is control-c, but a quit command
-            // could easily be added.
+            // Read input/comment from the keyboard and send it to everyone else.
             Scanner keyboard = new Scanner(System.in);
-            while (serverOutput != null) {
+            while ( outputToServer != null) {
                 String data = keyboard.nextLine();
-                if ((data.equals("0") || data.equals("1")) || data.equals("2")) {
-                    serverOutput.writeBytes(data + "\n");
-                } else if (data.equals("quit")) {
-                    serverOutput.close();
-                    serverOutput = null;
+                if (data.equals("quit")) {
+                      outputToServer.writeBytes("!\n");
+                      outputToServer.close();
+                      outputToServer = null;
+                    break;
                 } else {
-                    System.out.println("Invalid input, pleas try again.");
-                }
+                      outputToServer.writeBytes(data + "\n");
+                } 
             } // while
-            System.out.println("Connection lost.");
+            System.out.println("Connection lost/closed.");
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }

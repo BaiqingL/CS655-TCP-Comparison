@@ -7,15 +7,31 @@ import java.lang.*;
 public class TTTgame {
   public volatile int playerMove; //X = 1, O = -1
   private int[][] board; //3x3
+  public long[] timeUsed;
+  public long[] timeUsedLastMove;
+  public long timeLimit;
+  public static final long DEFAULT_TIME_LIMIT = 60000; // (60s = 60000ms)
 
   public TTTgame() {
     this.board = new int[3][3];
     this.playerMove = 1;
+    this.timeUsed = new long[2];
+    this.timeUsedLastMove = new long[2];
+    this.timeUsed[0] = 0; // for player using 'X'
+    this.timeUsed[1] = 0; // for player using 'O'
+    this.timeLimit = DEFAULT_TIME_LIMIT;
   }
 
   public void resetGame() {
     this.board = new int[3][3];
     this.playerMove = 1;
+    this.timeUsed = new long[2];
+    this.timeUsedLastMove = new long[2];
+    this.timeUsed[0] = 0;
+    this.timeUsed[1] = 0;
+    this.timeUsedLastMove[0] = 0;
+    this.timeUsedLastMove[1] = 0;
+    this.timeLimit = DEFAULT_TIME_LIMIT;
   }
 
   public boolean submitMove(int i, int j) {
@@ -28,6 +44,42 @@ public class TTTgame {
     }
   } 
 
+  public long getTimeLimit() {
+    return this.timeLimit;
+  }
+
+  public void setTimeLimit(long time) {
+    this.timeLimit = time;
+  }
+
+  public long countTime(long time, int playerID) {
+    if (playerID == 1) { // time used by player using 'X'
+      this.timeUsed[0] += time;
+      this.timeUsedLastMove[0] = time;
+      return this.timeUsed[0];
+    } else { // time used by player using 'O'
+      this.timeUsed[1] += time;
+      this.timeUsedLastMove[1] = time;
+      return this.timeUsed[1];
+    }
+  }
+
+  public long getTimeUsed() { // time used for playerMove
+    if (this.playerMove == 1) { // time used by player using 'X'
+      return this.timeUsed[0];
+    } else { // time used by player using 'O'
+      return this.timeUsed[1];
+    }
+  }
+
+  public long getTimeUsedLastMove() { // time used for last move by playerMove
+    if (this.playerMove == 1) { // time used by player using 'X'
+      return this.timeUsedLastMove[0];
+    } else { // time used by player using 'O'
+      return this.timeUsedLastMove[1];
+    }
+  }
+
   public String printState() {
     String output = "#";
     for (int i = 0; i < 3; i++) {
@@ -36,6 +88,14 @@ public class TTTgame {
       }
       output += Integer.toString(this.board[i][2]) + ";";
     }
+    // Time used by 'X': Total, last move, left:
+    output += "Time used by 'X': Total = " + Long.toString(timeUsed[0]) + 
+              ", Last Move = " +  Long.toString(timeUsedLastMove[0]) + 
+              ", Left = " + Long.toString(timeLimit - timeUsed[0]) + ";"; 
+    // Time used by 'O': Total, last move, left
+    output += "Time used by 'O': Total = " + Long.toString(timeUsed[1]) + 
+              ", Last Move = " +  Long.toString(timeUsedLastMove[1]) + 
+              ", Left = " + Long.toString(timeLimit - timeUsed[1]) + ";"; 
     return output;
   }
 
@@ -65,6 +125,22 @@ public class TTTgame {
     System.out.println("  ---|---|---");
     System.out.format("2 %2s |%2s |%2s \n", 
                       board[2][0], board[2][1], board[2][2]);
+    System.out.println(lines[3]); // time used by player using 'X'
+    System.out.println(lines[4]); // time used by player using 'O'
+  }
+
+  // return
+  // 0:  continue to play game
+  // 1:  player 1 (using 'X') win
+  // -1: player -1 (using 'O') win
+  // 
+  public int checkWinByTime() {
+    if (this.timeUsed[0] > this.timeLimit) { // player using 'X' timeout
+        return -1; // player using 'O' win
+    } else if (this.timeUsed[1] > this.timeLimit) { // player using 'O' timeout
+        return 1; // player using 'X' win
+    } // no one timeout, checkWin on board
+    return 0;
   }
 
   // return
@@ -73,6 +149,12 @@ public class TTTgame {
   // -1: player -1 win
   // 2:  tie
   public int checkWin() {
+    int winByTime = checkWinByTime();
+
+    if (winByTime != 0) { // winer determined by time used.
+        return winByTime;
+    }
+
     for (int i = 0; i < 3; i++) { // check each row
       if ((this.board[i][0] == this.board[i][1] && 
            this.board[i][0] == this.board[i][2]) && 
