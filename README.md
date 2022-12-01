@@ -10,7 +10,7 @@ To run the code in the SimpleMultiplayerTTTGame directory:
 
 &emsp;`java ViewServer <port number>`
 
-&emsp;ex:`java ViewServer 58001`
+&emsp;ex: `java ViewServer 58001`
 
 5. Next, run the game server from whichever machine/node:
 
