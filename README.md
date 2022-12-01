@@ -18,13 +18,13 @@ To run the code in the SimpleMultiplayerTTTGame directory:
 
 &emsp;ex: `java GameServer 58000 "localhost" 58001`
 
-6. Now, two game clients from whichever machine/nodes. These are the players:
+6. Now, run the following command to run a game client from whichever machine/node. Run two of them to play:
 
 &emsp;`java GameClient <host> <port>` 
 
 &emsp;ex: `java GameClient localhost 58000`
 
-7. Finally, you can add viewers with:
+7. Finally, you can add a viewer with:
 
 &emsp;`java ViewClient <host> <port>` 
 
