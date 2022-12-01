@@ -16,19 +16,18 @@ To run the code in the SimpleMultiplayerTTTGame directory:
 
 &emsp;`java GameServer <port> <viewServer> <viewPort>`
 
-&emsp;ex: `java GameServer 58000 "localhost" 58001`
+&emsp;ex: `java GameServer 58000 "localhost" 58001` to run the GameServer on localhost, `java GameServer 58000 hostNameRunningGameServer 58001` in general.
 
 6. Now, run the following command to run a game client from whichever machine/node. Run two of them to play:
 
-&emsp;`java GameClient <host> <port>` 
-
-&emsp;ex: `java GameClient localhost 58000`
+&emsp;ex: `java GameClient "localhost" 58000` to run the GameClient on localhost, `java GameClient hostNameRunningGameClient 58000` in general.
 
 7. Finally, you can add a viewer with:
 
 &emsp;`java ViewClient <host> <port>` 
 
-&emsp;ex: `java ViewClient localhost 58001`
+&emsp;ex: `java ViewClient "localhost" 58001` to run the ViewClient on localhost, `java ViewClient hostNameRunningViewClient 58001` in general.
+
 
 
 
