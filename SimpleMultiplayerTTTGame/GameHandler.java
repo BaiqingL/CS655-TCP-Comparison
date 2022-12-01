@@ -1,10 +1,11 @@
 // Tic Tac Toe Game Handler sends input prompts for move to player (client), receives the input from client,
 // plays game by the move according to the input, and sends updated game board to client
 
-import java.net.*;
-import java.io.*;
-import java.util.*;
-import java.lang.*;
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.Socket;
 
 public class GameHandler implements Runnable {
 
@@ -16,9 +17,10 @@ public class GameHandler implements Runnable {
   String viewHostname;
   int viewPort;
 
-  public GameHandler(Socket sock,Socket[] socketList, TTTgame game, int playerID, String viewHost, int viewPort) {
+  public GameHandler(Socket sock, Socket[] socketList, TTTgame game, int playerID, String viewHost,
+      int viewPort) {
     this.conSock = sock;
-    this.socketList = socketList;	// Keep reference to master list
+    this.socketList = socketList;  // Keep reference to master list
     this.game = game;
     this.playerID = playerID;
     this.viewHostname = viewHost;
@@ -27,7 +29,8 @@ public class GameHandler implements Runnable {
 
   public void run() {
     try {
-      BufferedReader inputFromPlayer = new BufferedReader(new InputStreamReader(this.conSock.getInputStream()));
+      BufferedReader inputFromPlayer = new BufferedReader(
+          new InputStreamReader(this.conSock.getInputStream()));
 
       this.viewSock = new Socket(this.viewHostname, this.viewPort);
       String playerSymbol = "X";
@@ -51,15 +54,17 @@ public class GameHandler implements Runnable {
 
       while (this.game.checkWin() == 0) {
         sendMessage(playerSymbol + this.game.printState() + "\r\n");
-        long timeStamp = System.currentTimeMillis(); 
-        String timeStampStr = playerSymbol + "#" + Long.toString(timeStamp) + ";";
-        sendMessageToView(timeStampStr + this.game.printState() + "\r\n"); // message with timeStamp to view
+        long timeStamp = System.currentTimeMillis();
+        String timeStampStr = playerSymbol + "#" + timeStamp + ";";
+        sendMessageToView(
+            timeStampStr + this.game.printState() + "\r\n"); // message with timeStamp to view
 
         if (this.game.playerMove == this.playerID) {
           // my turn
-          if (timeCounted && gameStarted) { // Time for Invalid move is counted, time for first move is not counted
-              startMoveTime = System.currentTimeMillis();  
-              timeCounted = false;
+          if (timeCounted
+              && gameStarted) { // Time for Invalid move is counted, time for first move is not counted
+            startMoveTime = System.currentTimeMillis();
+            timeCounted = false;
           }
           sendMessage("Please enter a row (0-2): " + "\r\n");
           String row = inputFromPlayer.readLine().trim();
@@ -69,13 +74,15 @@ public class GameHandler implements Runnable {
             sendMessage("Invalid move." + "\r\n");
           } else { // moved 
             if (!gameStarted) {
-                gameStarted = true;
+              gameStarted = true;
             } else {
-               endMoveTime = System.currentTimeMillis(); 
-               long timeUsed = endMoveTime - startMoveTime;
-               long timeTotal = this.game.countTime(timeUsed, this.playerID);
-               sendMessage("Time used in this move: " + timeUsed + "(ms), Total time used: " + timeTotal + "(ms)\n");
-               timeCounted = true;
+              endMoveTime = System.currentTimeMillis();
+              long timeUsed = endMoveTime - startMoveTime;
+              long timeTotal = this.game.countTime(timeUsed, this.playerID);
+              sendMessage(
+                  "Time used in this move: " + timeUsed + "(ms), Total time used: " + timeTotal
+                      + "(ms)\n");
+              timeCounted = true;
             }
           }
         } else {
@@ -88,12 +95,13 @@ public class GameHandler implements Runnable {
       }
 
       sendMessage(playerSymbol + this.game.printState());
-      long timeStamp = System.currentTimeMillis(); 
-      String timeStampStr = playerSymbol + "#" + Long.toString(timeStamp) + ";";
-      sendMessageToView(timeStampStr + this.game.printState() + "\r\n"); // message with timeStamp to view
+      long timeStamp = System.currentTimeMillis();
+      String timeStampStr = playerSymbol + "#" + timeStamp + ";";
+      sendMessageToView(
+          timeStampStr + this.game.printState() + "\r\n"); // message with timeStamp to view
 
       int checkResult = this.game.checkWin();
-      sendMessage(Integer.toString(checkResult) + "\r\n");
+      sendMessage(checkResult + "\r\n");
       if (checkResult == this.playerID) {
         sendMessage("GAME OVER! YOU WIN!" + "\r\n");
       } else if (checkResult == 2) {
@@ -108,24 +116,24 @@ public class GameHandler implements Runnable {
     }
   }
 
-  private void sendMessage(String message) { 
-      try {
-          DataOutputStream outputToPlayer = new DataOutputStream(this.conSock.getOutputStream());
-          outputToPlayer.writeBytes(message);
-	    //System.out.println(message);
-      } catch (IOException e) {
-          System.out.println(e.getMessage());
-      }
+  private void sendMessage(String message) {
+    try {
+      DataOutputStream outputToPlayer = new DataOutputStream(this.conSock.getOutputStream());
+      outputToPlayer.writeBytes(message);
+      //System.out.println(message);
+    } catch (IOException e) {
+      System.out.println(e.getMessage());
+    }
   }
 
-  private void sendMessageToView(String message) { 
-      try {
-          DataOutputStream outputToViewServer = new DataOutputStream(this.viewSock.getOutputStream());
-          outputToViewServer.writeBytes(message);
-	    //System.out.println(message);
-      } catch (IOException e) {
-          System.out.println(e.getMessage());
-      }
+  private void sendMessageToView(String message) {
+    try {
+      DataOutputStream outputToViewServer = new DataOutputStream(this.viewSock.getOutputStream());
+      outputToViewServer.writeBytes(message);
+      //System.out.println(message);
+    } catch (IOException e) {
+      System.out.println(e.getMessage());
+    }
   }
 
 
