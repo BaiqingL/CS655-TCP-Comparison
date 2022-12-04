@@ -1,0 +1,37 @@
+ViewServer
+run on othello node:
+java ViewServer 58001
+
+GameServer
+run on romeo node:
+java GameServer 58000 "10.10.172.2" 58001
+
+GameClient 1
+run on juliet node:
+java GameClient "10.10.172.190" 58000
+
+GameClient 2
+run on desdemona node:
+java GameClient "10.10.172.190" 58000
+
+ViewClient 1
+run on hamlet node:
+java ViewClient "10.10.172.2" 58001
+
+ViewClient 2
+run on ophelia node:
+java ViewClient "10.10.172.2" 58001
+
+...
+
+ViewClient n
+run on either hamlet or ophelia
+java ViewClient "10.10.172.2" 58001
+
+
+To automatically generate comments on a ViewClient,
+while the ViewClient is running, type 
+Auto <length> <interval>
+where <length> is the length of the generated message in bytes
+and <interval> is the interval in milliseconds at which to generate a message
+ex: Auto 30 500

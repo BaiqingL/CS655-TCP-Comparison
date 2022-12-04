@@ -8,22 +8,20 @@ To run the code in the SimpleMultiplayerTTTGame directory:
 
 4. First, run the view server from whichever machine/node you want:
 
-&emsp;`java ViewServer <port number>`
-
-&emsp;ex: `java ViewServer 58001`
+`java ViewServer <port number>` \t ex:`java ViewServer 58001`
 
 5. Next, run the game server from whichever machine/node:
 
-&emsp;`java GameServer <port> <viewServer> <viewPort>` where `<port>` (e.g. 58000) is the port number GameServer will listen on, `<ViewServer>` is the ID of the host/node running ViewServer, `<ViewPort>` is the port number the ViewServer will listen on. ex: `java GameServer 58000 "192.168.0.100" 58001` if the IP address of the host/node running ViewServer is 192.168.0.100.
+`java GameServer <port> <viewServer> <viewPort>` \t ex: `java GameServer 58000 "localhost" 58001`
 
-6. Now, run the following command to run a game client from whichever machine/node. Run two of them to play:
+6. Now, two game clients from whichever machine/nodes. These are the players:
 
-&emsp;`java GameClient <GameServerHostName> <port>` where `<GameServerHostName>` is the host name of the computer running GameServer and `<port>` is the port number (e.g., 58000) that the GameServer will listen. ex: `java GameClient "192.168.0.100" 58000` if the IP address of the host/node running GameServer is 192.168.0.100.
+`java GameClient <host> <port>` \t ex: `java GameClient localhost 58000`
 
-7. Finally, you can add a viewer with:
+7. Finally, you can add viewers with:
 
-&emsp;`java ViewClient <ViewServerHostName> <viewPort>` where `<ViewServerHostName>` is the host name of the host/node running ViewServer and `<viewPort>` is the port number (e.g. 58001) that ViewServer will listen on. ex: `java ViewClient "192.168.0.100" 58001` if the IP address of the host/node running ViewServer is 192.168.0.100.
+`java ViewClient <host> <port>` \t ex: `java ViewClient localhost 58001`
 
 
 
- 
+ See SimpleMultiplayerTTTGame/commands_to_run.txt for an example walkthrough on which commands to run on which nodes.
