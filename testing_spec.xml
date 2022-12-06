@@ -1,41 +1,91 @@
 <rspec xmlns="http://www.geni.net/resources/rspec/3" xmlns:emulab="http://www.protogeni.net/resources/rspec/ext/emulab/1" xmlns:tour="http://www.protogeni.net/resources/rspec/ext/apt-tour/1" xmlns:jacks="http://www.protogeni.net/resources/rspec/ext/jacks/1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.geni.net/resources/rspec/3    http://www.geni.net/resources/rspec/3/request.xsd" type="request">
-<node xmlns="http://www.geni.net/resources/rspec/3" client_id="cilent-1" component_manager_id="urn:publicid:IDN+genirack.nyu.edu+authority+cm">
+<node xmlns="http://www.geni.net/resources/rspec/3" client_id="Internet" component_manager_id="urn:publicid:IDN+genirack.nyu.edu+authority+cm">
+<icon xmlns="http://www.protogeni.net/resources/rspec/ext/jacks/1" url="https://portal.geni.net/images/VM-noTxt-centered.svg"/>
+<sliver_type xmlns="http://www.geni.net/resources/rspec/3" name="default-vm"/>
+<services xmlns="http://www.geni.net/resources/rspec/3">
+<execute xmlns="http://www.geni.net/resources/rspec/3" command="sudo apt install openjdk-11-jdk-headless -y" shell="/bin/sh"/>
+</services>
+<interface xmlns="http://www.geni.net/resources/rspec/3" client_id="interface-2"/>
+<interface xmlns="http://www.geni.net/resources/rspec/3" client_id="interface-4"/>
+<interface xmlns="http://www.geni.net/resources/rspec/3" client_id="interface-6"/>
+<interface xmlns="http://www.geni.net/resources/rspec/3" client_id="interface-8"/>
+<interface xmlns="http://www.geni.net/resources/rspec/3" client_id="interface-10"/>
+</node>
+<node xmlns="http://www.geni.net/resources/rspec/3" client_id="GameServer" component_manager_id="urn:publicid:IDN+genirack.nyu.edu+authority+cm">
 <icon xmlns="http://www.protogeni.net/resources/rspec/ext/jacks/1" url="https://portal.geni.net/images/VM-noTxt-centered.svg"/>
 <sliver_type xmlns="http://www.geni.net/resources/rspec/3" name="default-vm"/>
 <services xmlns="http://www.geni.net/resources/rspec/3">
 
-
-<execute xmlns="http://www.geni.net/resources/rspec/3" command="apt-get update" shell="/bin/sh"/>
-<execute xmlns="http://www.geni.net/resources/rspec/3" command="apt-get dist-upgrade -y" shell="/bin/sh"/>
+<execute xmlns="http://www.geni.net/resources/rspec/3" command="sudo apt install openjdk-11-jdk-headless -y" shell="/bin/sh"/>
 </services>
 <interface xmlns="http://www.geni.net/resources/rspec/3" client_id="interface-1"/>
 </node>
-<node xmlns="http://www.geni.net/resources/rspec/3" client_id="server" component_manager_id="urn:publicid:IDN+genirack.nyu.edu+authority+cm">
+<node xmlns="http://www.geni.net/resources/rspec/3" client_id="ViewServer" component_manager_id="urn:publicid:IDN+genirack.nyu.edu+authority+cm">
 <icon xmlns="http://www.protogeni.net/resources/rspec/ext/jacks/1" url="https://portal.geni.net/images/VM-noTxt-centered.svg"/>
 <sliver_type xmlns="http://www.geni.net/resources/rspec/3" name="default-vm"/>
 <services xmlns="http://www.geni.net/resources/rspec/3">
 
-
-<execute xmlns="http://www.geni.net/resources/rspec/3" command="apt-get update" shell="/bin/sh"/>
-<execute xmlns="http://www.geni.net/resources/rspec/3" command="apt-get dist-upgrade -y" shell="/bin/sh"/>
+<execute xmlns="http://www.geni.net/resources/rspec/3" command="sudo apt install openjdk-11-jdk-headless -y" shell="/bin/sh"/>
 </services>
-<interface xmlns="http://www.geni.net/resources/rspec/3" client_id="interface-server"/>
+<interface xmlns="http://www.geni.net/resources/rspec/3" client_id="interface-0"/>
 </node>
-<node xmlns="http://www.geni.net/resources/rspec/3" client_id="client-2" component_manager_id="urn:publicid:IDN+genirack.nyu.edu+authority+cm">
+<node xmlns="http://www.geni.net/resources/rspec/3" client_id="GameClient1" component_manager_id="urn:publicid:IDN+genirack.nyu.edu+authority+cm">
 <icon xmlns="http://www.protogeni.net/resources/rspec/ext/jacks/1" url="https://portal.geni.net/images/VM-noTxt-centered.svg"/>
 <sliver_type xmlns="http://www.geni.net/resources/rspec/3" name="default-vm"/>
 <services xmlns="http://www.geni.net/resources/rspec/3">
-
-
-<execute xmlns="http://www.geni.net/resources/rspec/3" command="apt-get update" shell="/bin/sh"/>
-<execute xmlns="http://www.geni.net/resources/rspec/3" command="apt-get dist-upgrade -y" shell="/bin/sh"/>
+<execute xmlns="http://www.geni.net/resources/rspec/3" command="sudo apt install openjdk-11-jdk-headless -y" shell="/bin/sh"/>
 </services>
-<interface xmlns="http://www.geni.net/resources/rspec/3" client_id="interface-2"/>
+<interface xmlns="http://www.geni.net/resources/rspec/3" client_id="interface-3"/>
+</node>
+<node xmlns="http://www.geni.net/resources/rspec/3" client_id="GameClient2" component_manager_id="urn:publicid:IDN+genirack.nyu.edu+authority+cm">
+<icon xmlns="http://www.protogeni.net/resources/rspec/ext/jacks/1" url="https://portal.geni.net/images/VM-noTxt-centered.svg"/>
+<sliver_type xmlns="http://www.geni.net/resources/rspec/3" name="default-vm"/>
+<services xmlns="http://www.geni.net/resources/rspec/3">
+<execute xmlns="http://www.geni.net/resources/rspec/3" command="sudo apt install openjdk-11-jdk-headless -y" shell="/bin/sh"/>
+</services>
+<interface xmlns="http://www.geni.net/resources/rspec/3" client_id="interface-5"/>
+</node>
+<node xmlns="http://www.geni.net/resources/rspec/3" client_id="ViewClient1" component_manager_id="urn:publicid:IDN+genirack.nyu.edu+authority+cm">
+<icon xmlns="http://www.protogeni.net/resources/rspec/ext/jacks/1" url="https://portal.geni.net/images/VM-noTxt-centered.svg"/>
+<sliver_type xmlns="http://www.geni.net/resources/rspec/3" name="default-vm"/>
+<services xmlns="http://www.geni.net/resources/rspec/3">
+<execute xmlns="http://www.geni.net/resources/rspec/3" command="sudo apt install openjdk-11-jdk-headless -y" shell="/bin/sh"/>
+<install xmlns="http://www.geni.net/resources/rspec/3"/>
+</services>
+<interface xmlns="http://www.geni.net/resources/rspec/3" client_id="interface-9"/>
+</node>
+<node xmlns="http://www.geni.net/resources/rspec/3" client_id="ViewClient2" component_manager_id="urn:publicid:IDN+genirack.nyu.edu+authority+cm">
+<icon xmlns="http://www.protogeni.net/resources/rspec/ext/jacks/1" url="https://portal.geni.net/images/VM-noTxt-centered.svg"/>
+<sliver_type xmlns="http://www.geni.net/resources/rspec/3" name="default-vm"/>
+<services xmlns="http://www.geni.net/resources/rspec/3">
+<execute xmlns="http://www.geni.net/resources/rspec/3" command="sudo apt install openjdk-11-jdk-headless -y" shell="/bin/sh"/>
+</services>
+<interface xmlns="http://www.geni.net/resources/rspec/3" client_id="interface-7"/>
 </node>
 <link xmlns="http://www.geni.net/resources/rspec/3" client_id="link-0">
+<interface_ref xmlns="http://www.geni.net/resources/rspec/3" client_id="interface-0"/>
 <interface_ref xmlns="http://www.geni.net/resources/rspec/3" client_id="interface-1"/>
-<interface_ref xmlns="http://www.geni.net/resources/rspec/3" client_id="interface-server"/>
 <interface_ref xmlns="http://www.geni.net/resources/rspec/3" client_id="interface-2"/>
+<component_manager xmlns="http://www.geni.net/resources/rspec/3" name="urn:publicid:IDN+genirack.nyu.edu+authority+cm"/>
+</link>
+<link xmlns="http://www.geni.net/resources/rspec/3" client_id="link-1">
+<interface_ref xmlns="http://www.geni.net/resources/rspec/3" client_id="interface-3"/>
+<interface_ref xmlns="http://www.geni.net/resources/rspec/3" client_id="interface-4"/>
+<component_manager xmlns="http://www.geni.net/resources/rspec/3" name="urn:publicid:IDN+genirack.nyu.edu+authority+cm"/>
+</link>
+<link xmlns="http://www.geni.net/resources/rspec/3" client_id="link-2">
+<interface_ref xmlns="http://www.geni.net/resources/rspec/3" client_id="interface-5"/>
+<interface_ref xmlns="http://www.geni.net/resources/rspec/3" client_id="interface-6"/>
+<component_manager xmlns="http://www.geni.net/resources/rspec/3" name="urn:publicid:IDN+genirack.nyu.edu+authority+cm"/>
+</link>
+<link xmlns="http://www.geni.net/resources/rspec/3" client_id="link-3">
+<interface_ref xmlns="http://www.geni.net/resources/rspec/3" client_id="interface-7"/>
+<interface_ref xmlns="http://www.geni.net/resources/rspec/3" client_id="interface-8"/>
+<component_manager xmlns="http://www.geni.net/resources/rspec/3" name="urn:publicid:IDN+genirack.nyu.edu+authority+cm"/>
+</link>
+<link xmlns="http://www.geni.net/resources/rspec/3" client_id="link-4">
+<interface_ref xmlns="http://www.geni.net/resources/rspec/3" client_id="interface-9"/>
+<interface_ref xmlns="http://www.geni.net/resources/rspec/3" client_id="interface-10"/>
 <component_manager xmlns="http://www.geni.net/resources/rspec/3" name="urn:publicid:IDN+genirack.nyu.edu+authority+cm"/>
 </link>
 </rspec>
