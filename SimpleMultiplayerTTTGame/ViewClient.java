@@ -16,7 +16,6 @@ public class ViewClient {
 
     /**
      * prompt the user for a string, cannot be the empty string
-     *
      * @param promptMsg: message to print out to ask the user for a string
      * @return valid string given by user
      */
@@ -31,11 +30,11 @@ public class ViewClient {
             else {
                 System.out.println("invalid input");
             }
-        } while (true);
+        } while(true);
     }
 
     public static void main(String[] args) {
-        String hostname = null; // Server host
+        String hostname = null; // Server host 
         int port = 0; // port to which Server listens
 
         // get host and port from command arguments
@@ -47,17 +46,16 @@ public class ViewClient {
                 System.err.println("Argument" + args[1] + " must be an unsigned number.");
                 System.exit(1);
             }
-        }
-        else {
+        } else {
             System.err.println("Usage: java ViewClient <host> <port>");
             System.exit(1);
         }
 
-        try {
+	try {
             System.out.println("Connecting to game view server on port " + port);
             Socket conSock = new Socket(hostname, port);
             TTTgame game = new TTTgame();
-            DataOutputStream outputToServer = new DataOutputStream(conSock.getOutputStream());
+            DataOutputStream   outputToServer = new DataOutputStream(conSock.getOutputStream());
 
             System.out.println("Connection established, viewer can comment.");
 
@@ -72,10 +70,10 @@ public class ViewClient {
             String viewerName = promptString("What is viewer's name?");
             String playerName = promptString("What is player's name for game?");
 
-            while (outputToServer != null) {
-                if (!viewerInfoSentToViewServer) {
-                    outputToServer.writeBytes("viewer info: " +
-                            viewerName + "," + playerName + ",\n");
+            while ( outputToServer != null) {
+               if (!viewerInfoSentToViewServer) {
+                    outputToServer.writeBytes("viewer info: " + 
+                           viewerName + "," + playerName + ",\n");
                     viewerInfoSentToViewServer = true;
                 }
 
@@ -87,10 +85,9 @@ public class ViewClient {
                     conSock.close();
                     outputToServer = null;
                     break;
-                }
-                else {
-                    outputToServer.writeBytes(data + "\n");
-                }
+                } else {
+                      outputToServer.writeBytes(data + "\n");
+                } 
             } // while
             System.out.println("Connection lost/closed.");
         } catch (IOException e) {
@@ -100,4 +97,4 @@ public class ViewClient {
         }
     }
 
-}
+} // View Client

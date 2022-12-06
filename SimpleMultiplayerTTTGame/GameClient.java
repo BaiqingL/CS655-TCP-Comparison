@@ -13,11 +13,10 @@ import java.util.*;
 import java.lang.*;
 
 public class GameClient {
-    public static long[] comTimes = {0, 0};
+    public static long [] comTimes = {0, 0};
 
     /**
      * prompt the user for a string, cannot be the empty string
-     *
      * @param promptMsg: message to print out to ask the user for a string
      * @return valid string given by user
      */
@@ -32,15 +31,14 @@ public class GameClient {
             else {
                 System.out.println("invalid input");
             }
-        } while (true);
+        } while(true);
     }
 
     /**
      * prompt the user for an int between min and max inclusive
-     *
      * @param promptMsg: message to print out to ask the user for an int
-     * @param min:       inclusive lower bound, int
-     * @param max:       inclusive upper bound, int
+     * @param min: inclusive lower bound, int
+     * @param max: inclusive upper bound, int
      * @return valid int given by user
      */
     public static int promptInt(String promptMsg, int min, int max) {
@@ -55,14 +53,13 @@ public class GameClient {
                 val = Integer.parseInt(userInput);
                 if (val >= min && val <= max) {
                     isValidInput = true;
-                }
-                else {
+                } else {
                     System.out.println("Value must be between " + min + " and " + max + " inclusive. Please try again.");
                 }
             } catch (NumberFormatException e) {
                 System.out.println("invalid input");
             }
-        } while (!isValidInput);
+        } while(!isValidInput);
         return val;
     }
 
@@ -79,8 +76,7 @@ public class GameClient {
                 System.err.println("Argument" + args[1] + " must be an unsigned number.");
                 System.exit(1);
             }
-        }
-        else {
+        } else {
             System.err.println("Usage: java Client <host> <port>");
             System.exit(1);
         }
@@ -100,7 +96,7 @@ public class GameClient {
 
             // Read input from the keyboard/client and send it to the game server.
             Scanner keyboard = new Scanner(System.in);
-            int moveInputs = 0;
+            int moveInputs = 0; 
             boolean playerNameSentToGameServer = false;
             String playerName = promptString("What is player's name?");
 
@@ -122,16 +118,16 @@ public class GameClient {
                     outputToServer = null;
 
                     break;
-                }
-                else if ((data.equals("0") || data.equals("1")) || data.equals("2")) {
+                } else if ((data.startsWith("0") || data.startsWith("1")) || data.startsWith("2")) {
                     outputToServer.writeBytes(data + "\n");
-                    moveInputs++;
-                    if (moveInputs % 2 == 0) {
-                        comTimes[0] = System.currentTimeMillis();
-                    }
-                }
-                else {
-                    System.out.println("Invalid input, please try again.");
+                    moveInputs++; 
+                    if (moveInputs%2 == 0) {
+                        comTimes[0] = System.currentTimeMillis(); 
+                    } 
+                } else if (data.startsWith("Auto ") ) {
+                    outputToServer.writeBytes(data + "\n");
+                } else {
+                    System.out.println("Invalid input, pleas try again.");
                 }
             }
 

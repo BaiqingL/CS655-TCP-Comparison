@@ -21,21 +21,21 @@ public class ViewServer {
     // get the index of the game being plaued by playerName   
     public int getGameIndex(String playerName) {
         for (int i = 0; i < MAX_NUMBER_OF_GAMES; i++) {
-            if (this.viewStages[i].players[0].equals(playerName) ||
-                    this.viewStages[i].players[1].equals(playerName)) {
+            if (this.viewStages[i].players[0].equals(playerName) || 
+                this.viewStages[i].players[1].equals(playerName)) {
                 return i;
             }
         }
         return -1;
     }
 
-    // add viewer to the game being plaued by playerName
+    // add viewer to the game being plaued by playerName   
     // return: gameIndex, playerIndex, viewerIndex
     public int[] addViewerToGame(String playerName, String viewerName, Socket viewSock) {
-        int[] indexes = {-1, -1, -1};
+        int [] indexes = {-1, -1, -1};
         for (int i = 0; i < MAX_NUMBER_OF_GAMES; i++) {
-            if (this.viewStages[i].players[0].equals(playerName) ||
-                    this.viewStages[i].players[1].equals(playerName)) {
+            if (this.viewStages[i].players[0].equals(playerName) || 
+                this.viewStages[i].players[1].equals(playerName)) {
 
                 for (int j = 0; j < MAX_NUMBER_OF_VIEWERS; j++) {
                     if (this.viewStages[i].viewers[j] == null) {
@@ -44,16 +44,15 @@ public class ViewServer {
                         indexes[0] = i;
                         if (this.viewStages[i].players[0].equals(playerName)) {
                             indexes[1] = 0;
-                        }
-                        else {
+                        } else {
                             indexes[1] = 1;
                         }
                         indexes[2] = j;
                         return indexes;
                     }
-                }
-            }
-        }
+                } // for
+            } // if
+        } // for
         return indexes;
     }
 
@@ -74,57 +73,55 @@ public class ViewServer {
 
                 Socket conSock = serverSock.accept();
 
-                BufferedReader inputFromPlayerViewer =
-                        new BufferedReader(new InputStreamReader(conSock.getInputStream()));
+                BufferedReader inputFromPlayerViewer = 
+                  new BufferedReader(new InputStreamReader(conSock.getInputStream()));
 
                 String line = inputFromPlayerViewer.readLine(); // get player's or viewer's info
 
-                if (line.startsWith(viewerInfoTag)) {
-                    viewerInfoReceived = line.substring(viewerInfoTag.length());
+                if (line.startsWith(viewerInfoTag) ) {
+                   viewerInfoReceived = line.substring(viewerInfoTag.length());
 
-                    // viewer info: viewerName, playerName
-                    String[] lines = viewerInfoReceived.split(",");
-                    String viewerName = lines[0];
-                    String playerName = lines[1];
+                   // viewer info: viewerName, playerName,
+                   String[] lines = viewerInfoReceived.split(",");
+                   String viewerName = lines[0];
+                   String playerName = lines[1];
 
-                    int[] indexes = addViewerToGame(playerName, viewerName, conSock);
+                   int[] indexes = addViewerToGame(playerName, viewerName, conSock);
 
-                    if (indexes[0] != -1) {
-                        System.out.println("Viewer: " + viewerName + " connected.");
-                    }
-                    else {
-                        System.out.println("Viewer: " + viewerName + " not connected.");
-                    }
+                   if (indexes[0] != -1) {
+                       System.out.println("Viewer: " + viewerName + " connected.");                     
+                   } else {
+                       System.out.println("Viewer: " + viewerName + " not connected."); 
+                   }
 
-                    CommentHandler handler = new CommentHandler(indexes, this.viewStages);
-                    Thread theThread = new Thread(handler);
-                    theThread.start();
+                  CommentHandler handler = new CommentHandler(indexes, this.viewStages);
+                  Thread theThread = new Thread(handler);
+                  theThread.start();
 
-                }
-                else if (line.startsWith(playerInfoTag)) {
-                    playerInfoReceived = line.substring(playerInfoTag.length());
+                } else if (line.startsWith(playerInfoTag)) {
+                   playerInfoReceived = line.substring(playerInfoTag.length());
 
-                    // player info: gameIndex, playerIndex, playerName, playerID
-                    String[] lines = playerInfoReceived.split(",");
-                    int gameIndex = Integer.parseInt(lines[0]);
-                    int playerIndex = Integer.parseInt(lines[1]);
-                    String playerName = lines[2];
-                    int playerID = Integer.parseInt(lines[3]);
+                   // player info: gameIndex, playerIndex, playerName, playerID,
+                   String[] lines = playerInfoReceived.split(",");
+                   int gameIndex = Integer.parseInt(lines[0]);
+                   int playerIndex = Integer.parseInt(lines[1]);
+                   String playerName = lines[2];
+                   int playerID = Integer.parseInt(lines[3]);
 
-                    this.viewStages[gameIndex].players[playerIndex] = playerName;
-                    this.viewStages[gameIndex].playerIDs[playerIndex] = playerID;
-                    this.viewStages[gameIndex].playerPublishSockets[playerIndex] = conSock;
+                   this.viewStages[gameIndex].players[playerIndex] = playerName;
+                   this.viewStages[gameIndex].playerIDs[playerIndex] = playerID;
+                   this.viewStages[gameIndex].playerPublishSockets[playerIndex] = conSock;
 
-                    playerCount++;
-                    System.out.println("Player " + Integer.toString(playerCount) + " connected.");
-                    if (playerCount % 2 == 1) { // one PubHandler provides enough information for game
-                        PubHandler handler = new PubHandler(gameIndex, playerIndex, this.viewStages);
-                        // PubHandler handler = new PubHandler(conSock, this.socketList, playerID);
-                        Thread theThread = new Thread(handler);
-                        theThread.start();
-                    }
-                }
-            }
+                   playerCount++;
+                   System.out.println("Player " + Integer.toString(playerCount) + " connected.");
+                   if (playerCount % 2 == 1) { // one PubHandler provides enough information for game
+                       PubHandler handler = new PubHandler(gameIndex, playerIndex, this.viewStages);
+                       // PubHandler handler = new PubHandler(conSock, this.socketList, playerID);
+                       Thread theThread = new Thread(handler);
+                       theThread.start();
+                   }
+                } 
+            } // while 
 
         } catch (IOException e) {
             System.out.println(e.getMessage());
@@ -142,8 +139,7 @@ public class ViewServer {
                 System.err.println("Argument" + args[0] + " must be an unsigned number.");
                 System.exit(1);
             }
-        }
-        else {
+        } else {
             System.err.println("Usage: java Server <port>");
             System.exit(1);
         }
