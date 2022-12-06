@@ -17,7 +17,7 @@ public class CommentGenerator implements Runnable {
     }
 
     public void run() {
-        // Generate comments.
+        // Generate comments
         try {
             while (true) {
                 if (this.outputToServer == null) {
@@ -28,11 +28,11 @@ public class CommentGenerator implements Runnable {
 
                 sendAutoComment(this.autoCommentStart, autoCommentLength, this.outputToServer);
                 Thread.sleep(autoCommentInterval); // sleep  
-            } // while
+            }
         } catch (Exception e) {
             System.out.println("Error: " + e.toString());
         }
-    } // run()
+    }
 
     public void sendAutoComment(String start, int length, DataOutputStream outputToServer) {
         String randomStr = "";
@@ -46,6 +46,6 @@ public class CommentGenerator implements Runnable {
         } catch (Exception e) {
             System.out.println("Error: " + e.toString());
         } 
-    } // sendAutoComment(..)
+    }
 
 } 

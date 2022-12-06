@@ -18,7 +18,7 @@ public class GameListener implements Runnable {
     }
 
     public void run() {
-        // Wait for data from the server.  If received, output it.
+        // Wait for data from the server.  If received, output it
         try {
             BufferedReader inputFromServer = new BufferedReader(new InputStreamReader(conSock.getInputStream()));
             DataOutputStream outputToServer = new DataOutputStream(conSock.getOutputStream());
@@ -69,29 +69,34 @@ public class GameListener implements Runnable {
                 if (textFromServer.startsWith(myPlaySymbol + "#") || 
                     textFromServer.startsWith(otherPlaySymbol + "#") ) {
                     this.game.printBoard(textFromServer.substring(2));
-                    if (computeDelay) {
+                    if (computeDelay && textFromServer.startsWith(myPlaySymbol + "#")) {
                         long curTime = System.currentTimeMillis();
                         long networkDelay = curTime - this.comTimes[0];
-                        //System.out.println("Network Delay : " + networkDelay + " (ms)\n");
+                        System.out.println("Network Delay : " + networkDelay + " (ms)\n");
                         computeDelay = false;
+                        Thread.sleep(interval); 
                     }
                     int [][] intBoard = this.game.boardToIntArray(textFromServer.substring(2));
                     int [] move = randomMove(intBoard);
                     row = move[0];
                     col = move[1];
                 } else {
-                    System.out.println(textFromServer);
+                    if (!textFromServer.startsWith("Auto") ) {
+                        System.out.println(textFromServer);
+                    }
                     if (autoPlay && textFromServer.startsWith("Please enter") ) {
+                       this.comTimes[0] = System.currentTimeMillis();
                        outputToServer.writeBytes(Integer.toString(row) + "," + Integer.toString(col) + "\n");
-                       Thread.sleep(interval); 
+
+//                       Thread.sleep(interval); 
                     }
                 }
-            } // while
+            }
         } catch (Exception e) {
             System.out.println("Error: " + e.toString());
-        }  // try
+        }
 
-    } // run()
+    }
 
     public int[] randomMove(int[][] intBoard) {
         int numberOfPossibleMoves = 0;
@@ -122,4 +127,4 @@ public class GameListener implements Runnable {
         return move; 
     }
 
-} // Game Listener for Game Client
+}

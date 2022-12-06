@@ -24,4 +24,4 @@ To run the code in the SimpleMultiplayerTTTGame directory:
 
 
 
- See SimpleMultiplayerTTTGame/commands_to_run.txt for an example walkthrough on which commands to run on which nodes.
+ See SimpleMultiplayerTTTGame/commands_to_run.txt for a full walkthrough on how to run, including GENI set up.

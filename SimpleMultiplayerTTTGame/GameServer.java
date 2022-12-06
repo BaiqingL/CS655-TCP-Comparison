@@ -48,10 +48,10 @@ public class GameServer {
                     theThread.start();
                     playerID -= 2;
 
-                } // for j
+                }
 
                 System.out.println("Game " + Integer.toString(i+1) + " running...");
-            } // for i
+            }
 
         } catch (IOException e) {
             System.out.println(e.getMessage());
@@ -80,5 +80,5 @@ public class GameServer {
 
         GameServer server = new GameServer(viewHostname, viewPort);
         server.getConnection(port);
-    } // main()
-} // Game Server
+    }
+}

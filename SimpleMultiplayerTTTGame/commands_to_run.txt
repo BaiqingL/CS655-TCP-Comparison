@@ -1,37 +1,82 @@
-ViewServer
-run on othello node:
-java ViewServer 58001
+// Create your slice using the Rspec
 
-GameServer
-run on romeo node:
-java GameServer 58000 "10.10.172.2" 58001
-
-GameClient 1
-run on juliet node:
-java GameClient "10.10.172.190" 58000
-
-GameClient 2
-run on desdemona node:
-java GameClient "10.10.172.190" 58000
-
-ViewClient 1
-run on hamlet node:
-java ViewClient "10.10.172.2" 58001
-
-ViewClient 2
-run on ophelia node:
-java ViewClient "10.10.172.2" 58001
-
-...
-
-ViewClient n
-run on either hamlet or ophelia
-java ViewClient "10.10.172.2" 58001
+// A list of commands below used to prepare and run test on a slice
+// for your reference (note: parameters in scp for your slice will be different)
 
 
-To automatically generate comments on a ViewClient,
-while the ViewClient is running, type 
-Auto <length> <interval>
-where <length> is the length of the generated message in bytes
-and <interval> is the interval in milliseconds at which to generate a message
-ex: Auto 30 500
+// install java on 6 hosts of the slice
+sudo apt update
+sudo apt install default-jdk
+
+mkdir game
+cd game
+
+// copy *.java to 6 hosts of the slice
+
+// copy to ViewServerHost
+scp -i id_geni_ssh_rsa -P 26812 *.java richchen@pc1.instageni.rnoc.gatech.edu:~/game/
+// copy to GameClientHost2
+scp -i id_geni_ssh_rsa -P 26810 *.java richchen@pc2.instageni.rnoc.gatech.edu:~/game/
+// copy to GameServerHost
+scp -i id_geni_ssh_rsa -P 26810 *.java richchen@pc4.instageni.rnoc.gatech.edu:~/game/
+// copy to  GameClientHost1
+scp -i id_geni_ssh_rsa -P 26810 *.java richchen@pc1.instageni.rnoc.gatech.edu:~/game/
+// copy to ViewClientHost1 and ViewClientHost2
+scp -i id_geni_ssh_rsa -P 26810 *.java richchen@pc3.instageni.rnoc.gatech.edu:~/game/
+scp -i id_geni_ssh_rsa -P 26811 *.java richchen@pc1.instageni.rnoc.gatech.edu:~/game/
+
+// compile 
+javac *.java
+
+// run gaming
+// on ViewServerHost (10.10.172.130)
+java ViewServer 58001 
+// on GameServerHost (10.10.172.2)
+java GameServer 58000 "10.10.172.130" 58001
+
+// on GameClientHost1 and GameClientHost2
+java GameClient "10.10.172.2" 58000
+// GameClient will prompt/ask to input player name and time limit (in seconds)
+
+// playerName and timeLimit as args
+java GameClient "10.10.172.2" 58000 Alex 100
+// player name Alex and time limit 100 (s) as args
+
+java GameClient "10.10.172.2" 58000 Bob 100
+// player name Bob and time limit 100 (s) as args
+
+// playerName, timeLimit, Auto <interval> as args
+java GameClient "10.10.172.2" 58000 Alex 100 Auto 2000
+// player name Alex, time limit 100(s), Auto and 2000(ms) per move as args
+// GameClient will play a move/2000ms for Alex automatically 
+
+java GameClient "10.10.172.2" 58000 Bob 100 Auto 2000
+// player name Bob, time limit 100(s), Auto and 2000(ms) per move as args
+/ GameClient will play a move/2000ms for Bob automatically 
+
+// on ViewClientHost1 and ViewClientHost2
+java ViewClient "10.10.172.130" 58001
+// ViewClient will prompt/ask to input viewer name and player name
+
+// ViewerName and playerName as args
+java ViewClient "10.10.172.130" 58001 Paul Alex 
+// viewer name Paul and player name Alex as args
+
+java ViewClient "10.10.172.130" 58001 Peter Alex 
+// viewer name Peter and player name Alex as args
+
+// ViewerName, playerName, Auto <length> <interval> as args
+java ViewClient "10.10.172.130" 58001 Paul Alex Auto 30 500
+// viewer name Paul, player name Alex, Auto 30 500 as args
+// automatically generate a comment of 30 bytes every 500ms
+
+java ViewClient "10.10.172.130" 58001 Peter Alex Auto 30 500
+// viewer name Peter, player name Alex, Auto 30 500 as args
+// automatically generate a comment of 30 bytes every 500ms
+
+
+// commands to change link bandwidth on router-a
+sudo tc qdisc replace dev eth0 root netem rate 10kbit
+sudo tc qdisc replace dev eth1 root netem rate 10kbit
+sudo tc qdisc replace dev eth2 root netem rate 10kbit
+
