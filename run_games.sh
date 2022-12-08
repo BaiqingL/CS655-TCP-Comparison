@@ -167,7 +167,21 @@ do
     echo "Last line: $last_line"
     # Download $last_line as an url and save as viewPerf_{$i}_{$algo}.txt
     wget -O viewPerf_${i}_${algo}.txt $last_line
+    echo "Experiment iteration $i complete"
+
+
+    echo "Cleaning view server..."
+    ssh -i $private_key $username@$view_server_host -p $view_server_port "pkill -9 screen; screen -wipe" 
+    echo "Cleaning game server..."
+    ssh -i $private_key $username@$game_server_host -p $game_server_port "pkill -9 screen; screen -wipe" 
+    echo "Cleaning game client 1..."
+    ssh -i $private_key $username@$game_client_1_host -p $game_client_1_port "pkill -9 screen; screen -wipe;"
+    echo "Cleaning game client 2..."
+    ssh -i $private_key $username@$game_client_1_host -p $game_client_1_port "pkill -9 screen; screen -wipe;"
+    echo "Clean view client 1..."
+    ssh -i $private_key $username@$view_client_1_host -p $view_client_1_port "killall -9 java"
+    echo "Cleaning view client 2..."
+    ssh -i $private_key $username@$view_client_2_host -p $view_client_2_port "pkill -9 screen; screen -wipe;" 
+    echo "Done cleaning"
     
-    echo "Experiment iteration $i complete, copying results"
-    # scp back /users/$username/game/viewPerf.txt to local machine
 done
