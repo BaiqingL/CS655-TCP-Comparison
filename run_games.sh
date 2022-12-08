@@ -155,7 +155,7 @@ do
     echo "Start game client 1..."
     ssh -i $private_key $username@$game_client_1_host -p $game_client_1_port "pkill -9 screen; screen -wipe; screen -d -m; screen -X stuff \"cd game; java GameClient \\\"10.10.1.2\\\" 58000 Alex 100 Auto 2000 \n\""
     echo "Start game client 2..."
-    ssh -i $private_key $username@$game_client_1_host -p $game_client_1_port "pkill -9 screen; screen -wipe; screen -d -m; screen -X stuff \"cd game; java GameClient \\\"10.10.1.2\\\" 58000 Bob 100 Auto 2000 \n\""
+    ssh -i $private_key $username@$game_client_2_host -p $game_client_2_port "pkill -9 screen; screen -wipe; screen -d -m; screen -X stuff \"cd game; java GameClient \\\"10.10.1.2\\\" 58000 Bob 100 Auto 2000 \n\""
     echo "Clean view client 1..."
     ssh -i $private_key $username@$view_client_1_host -p $view_client_1_port "killall -9 java"
     echo "Start view client 2..."
