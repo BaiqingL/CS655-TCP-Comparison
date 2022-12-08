@@ -37,6 +37,7 @@ Compile
 `javac *.java`
 
 Run the game:
+
 `
 // on ViewServer (10.10.1.1)
 java ViewServer 58001 
