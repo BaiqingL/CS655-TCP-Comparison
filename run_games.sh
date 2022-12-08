@@ -63,10 +63,10 @@ if [ -z "$view_client_2_port" ]; then
 fi
 
 echo "Start game client 1..."
-ssh -i $private_key $username@$game_client_1_host -p $game_client_1_port "pkill -9 screen; screen -d -m; screen -X stuff \"cd game; java GameClient \"10.10.1.2\" 58000 Alex 100 Auto 2000 \n\""
+ssh -i $private_key $username@$game_client_1_host -p $game_client_1_port "pkill -9 screen; screen -wipe; screen -d -m; screen -X stuff \"cd game; java GameClient \"10.10.1.2\" 58000 Alex 100 Auto 2000 \n\""
 echo "Start game client 2..."
-ssh -i $private_key $username@$game_client_1_host -p $game_client_1_port "pkill -9 screen; screen -d -m; screen -X stuff \"cd game; java GameClient \"10.10.1.2\" 58000 Bob 100 Auto 2000 \n\""
+ssh -i $private_key $username@$game_client_1_host -p $game_client_1_port "pkill -9 screen; screen -wipe; screen -d -m; screen -X stuff \"cd game; java GameClient \"10.10.1.2\" 58000 Bob 100 Auto 2000 \n\""
 echo "Start view client 1..."
-ssh -i $private_key $username@$view_client_1_host -p $view_client_1_port "pkill -9 screen; screen -d -m; screen -X stuff \"cd game; java ViewClient \"10.10.1.1\" 58001 Peter Alex Auto 30 500 \n\""
+ssh -i $private_key $username@$view_client_1_host -p $view_client_1_port "pkill -9 screen; screen -wipe; screen -d -m; screen -X stuff \"cd game; java ViewClient \"10.10.1.1\" 58001 Peter Alex Auto 30 500 \n\""
 echo "Start view client 2..."
-ssh -i $private_key $username@$view_client_2_host -p $view_client_2_port "pkill -9 screen; screen -d -m; screen -X stuff \"cd game; java ViewClient \"10.10.1.1\" 58001 Paul Alex Auto 30 500 \n\"" 
+ssh -i $private_key $username@$view_client_2_host -p $view_client_2_port "pkill -9 screen; screen -wipe; screen -d -m; screen -X stuff \"cd game; java ViewClient \"10.10.1.1\" 58001 Paul Alex Auto 30 500 \n\"" 
