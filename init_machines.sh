@@ -107,33 +107,39 @@ fi
 
 
 echo "Installing Java on all machines..."
-ssh -i $private_key $username@$game_server_host -p $game_server_port "sudo apt update -y; sudo apt install default-jdk -y; mkdir game" > /dev/null
-ssh -i $private_key $username@$view_server_host -p $view_server_port "sudo apt update -y; sudo apt install default-jdk -y; mkdir game" > /dev/null
-ssh -i $private_key $username@$game_client_1_host -p $game_client_1_port "sudo apt update -y; sudo apt install default-jdk -y; mkdir game" > /dev/null
-ssh -i $private_key $username@$game_client_2_host -p $game_client_2_port "sudo apt update -y; sudo apt install default-jdk -y; mkdir game" > /dev/null
-ssh -i $private_key $username@$view_client_1_host -p $view_client_1_port "sudo apt update -y; sudo apt install default-jdk -y; mkdir game" > /dev/null
-ssh -i $private_key $username@$view_client_2_host -p $view_client_2_port "sudo apt update -y; sudo apt install default-jdk -y; mkdir game" > /dev/null
+ssh -o StrictHostKeychecking=no -i $private_key $username@$game_server_host -p $game_server_port "sudo apt-get update -y; sudo apt-get install default-jdk -y; mkdir game" > /dev/null
+echo "Finished installing Java on game server."
+ssh -o StrictHostKeychecking=no -i $private_key $username@$view_server_host -p $view_server_port "sudo apt-get update -y; sudo apt-get install default-jdk -y; mkdir game" > /dev/null
+echo "Finished installing Java on view server."
+ssh -o StrictHostKeychecking=no -i $private_key $username@$game_client_1_host -p $game_client_1_port "sudo apt-get update -y; sudo apt-get install default-jdk -y; mkdir game" > /dev/null
+echo "Finished installing Java on game client 1."
+ssh -o StrictHostKeychecking=no -i $private_key $username@$game_client_2_host -p $game_client_2_port "sudo apt-get update -y; sudo apt-get install default-jdk -y; mkdir game" > /dev/null
+echo "Finished installing Java on game client 2."
+ssh -o StrictHostKeychecking=no -i $private_key $username@$view_client_1_host -p $view_client_1_port "sudo apt-get update -y; sudo apt-get install default-jdk -y; mkdir game" > /dev/null
+echo "Finished installing Java on view client 1."
+ssh -o StrictHostKeychecking=no -i $private_key $username@$view_client_2_host -p $view_client_2_port "sudo apt-get update -y; sudo apt-get install default-jdk -y; mkdir game" > /dev/null
+echo "Finished installing Java on view client 2."
 echo "Done installing Java on all machines."
 
 echo "Copying java files and compiling to all machines..."
 # Copy all java files in SimpleMultiplayerTTTGame to the machine's ~/game/ directory, then compile them
 scp -i $private_key -P $game_server_port SimpleMultiplayerTTTGame/*.java $username@$game_server_host:~/game/ > /dev/null
-ssh -i $private_key $username@$game_server_host -p $game_server_port  "cd game; javac *.java" > /dev/null
+ssh -o StrictHostKeychecking=no -i $private_key $username@$game_server_host -p $game_server_port  "cd game; javac *.java" > /dev/null
 
 scp -i $private_key -P $view_server_port SimpleMultiplayerTTTGame/*.java $username@$view_server_host:~/game/ > /dev/null
-ssh -i $private_key $username@$view_server_host -p $view_server_port "cd game; javac *.java" > /dev/null
+ssh -o StrictHostKeychecking=no -i $private_key $username@$view_server_host -p $view_server_port "cd game; javac *.java" > /dev/null
 
 scp -i $private_key -P $game_client_1_port SimpleMultiplayerTTTGame/*.java $username@$game_client_1_host:~/game/ > /dev/null
-ssh -i $private_key $username@$game_client_1_host -p $game_client_1_port "cd game; javac *.java" > /dev/null
+ssh -o StrictHostKeychecking=no -i $private_key $username@$game_client_1_host -p $game_client_1_port "cd game; javac *.java" > /dev/null
 
 scp -i $private_key -P $game_client_2_port SimpleMultiplayerTTTGame/*.java $username@$game_client_2_host:~/game/ > /dev/null
-ssh -i $private_key $username@$game_client_2_host -p $game_client_2_port "cd game; javac *.java" > /dev/null
+ssh -o StrictHostKeychecking=no -i $private_key $username@$game_client_2_host -p $game_client_2_port "cd game; javac *.java" > /dev/null
 
 scp -i $private_key -P $view_client_1_port SimpleMultiplayerTTTGame/*.java $username@$view_client_1_host:~/game/ > /dev/null
-ssh -i $private_key $username@$view_client_1_host -p $view_client_1_port "cd game; javac *.java" > /dev/null
+ssh -o StrictHostKeychecking=no -i $private_key $username@$view_client_1_host -p $view_client_1_port "cd game; javac *.java" > /dev/null
 
 scp -i $private_key -P $view_client_2_port SimpleMultiplayerTTTGame/*.java $username@$view_client_2_host:~/game/ > /dev/null
-ssh -i $private_key $username@$view_client_2_host -p $view_client_2_port "cd game; javac *.java" > /dev/null
+ssh -o StrictHostKeychecking=no -i $private_key $username@$view_client_2_host -p $view_client_2_port "cd game; javac *.java" > /dev/null
 echo "Done copying java files and compiled them to all machines."
 
 # Ask the user if they want to use reno, cubic, or bbr
