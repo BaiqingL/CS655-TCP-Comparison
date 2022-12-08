@@ -12,9 +12,10 @@ mkdir game
 cd game
 
 
-For copying the game java files to slice test-slice
-// copy to ViewServer
-`scp -i id_geni_ssh_rsa -P 30610 *.java richchen@pc2.genirack.nyu.edu:~/game/
+For copying the game java files to slice test-slice:
+
+`// copy to ViewServer
+scp -i id_geni_ssh_rsa -P 30610 *.java richchen@pc2.genirack.nyu.edu:~/game/
 // copy to GameClient2
 scp -i id_geni_ssh_rsa -P 30611 *.java richchen@pc5.genirack.nyu.edu:~/game/
 // copy to GameServer
@@ -24,7 +25,7 @@ scp -i id_geni_ssh_rsa -P 30610 *.java richchen@pc5.genirack.nyu.edu:~/game/
 // copy to ViewClient1
 scp -i id_geni_ssh_rsa -P 30613 *.java richchen@pc5.genirack.nyu.edu:~/game/
 // copy to ViewClient2
-scp -i id_geni_ssh_rsa -P 30614 *.java richchen@pc5.genirack.nyu.edu:~/game/`
+scp -i id_geni_ssh_rsa -P 30614 *.java richchen@pc5.genirack.nyu.edu:~/game/
 
 
 
@@ -89,6 +90,4 @@ sudo tc qdisc replace dev eth3 root netem rate 10kbit
 
 sudo tc qdisc replace dev eth1 root netem delay 100ms
 sudo tc qdisc replace dev eth2 root netem delay 100ms
-sudo tc qdisc replace dev eth3 root netem delay 100ms
-
-
+sudo tc qdisc replace dev eth3 root netem delay 100ms`
