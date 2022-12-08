@@ -5,11 +5,7 @@ Create your slice using the Rspec
 A list of commands below used to prepare and run test on a slice
 for your reference (note: parameters in scp for your slice will be different)
 
-First, configure the ports within the `init_machines.sh` file to accurate reflect the ports you want to use. 
-
-Then, just simply execute the `init_machines.sh` script, which will install java, copy the files to the machines, and set the correct congestion algorithm. 
-
-
+Execute the `init_machines.sh` script, which will install java, copy the files to the machines, and set the correct congestion algorithm. The script will ask the user to input all hosts and ports of their machines corresponding to the functions the machines are providing. Ensure these are correct before proceeding. It will also ask for a desired congestion control algorithm to be used.
 
 ### Running the game:
 

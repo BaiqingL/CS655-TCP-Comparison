@@ -149,14 +149,6 @@ ssh -o StrictHostKeychecking=no -i $private_key $username@$view_client_2_host -p
 wait
 echo "Done copying java files and compiled them to all machines."
 
-# Ask the user if they want to use reno, cubic, or bbr
-echo "Enter congestion control algorithm [reno, cubic, bbr]:"
-read congestion_control
-while [ "$congestion_control" != "reno" ] && [ "$congestion_control" != "cubic" ] && [ "$congestion_control" != "bbr" ]; then
-    echo "Invalid congestion control algorithm. Try again"
-    exit 1
-fi
-
 # Execute the set_congestion script based on which congestion they chose
 algo=""
 
