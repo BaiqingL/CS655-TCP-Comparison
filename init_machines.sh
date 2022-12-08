@@ -8,103 +8,102 @@ if [ -n "$private_key_input" ]; then
 fi
 
 # Read in the host for router
-echo "Enter router host [default pc5.genirack.nyu.edu]:"
+echo "Enter router host [default pc3.instageni.research.umich.edu]:"
 read router_host
 if [ -z "$router_host" ]; then
-    router_host = "pc5.genirack.nyu.edu"
+    router_host="pc3.instageni.research.umich.edu"
 fi
 
 # Read in the port for router
-echo "Enter router port [default 30612]:"
+echo "Enter router port [default 28612]:"
 read router_port
 if [ -z "$router_port" ]; then
-    router_port = "30612"
+    router_port="28612"
 fi
 
 # Read in the host for game server
-echo "Enter game server host [default pc5.genirack.nyu.edu]:"
+echo "Enter game server host [default pc1.instageni.research.umich.edu]:"
 read game_server_host
 if [ -z "$game_server_host" ]; then
-    game_server_host = "pc5.genirack.nyu.edu"
+    game_server_host="pc1.instageni.research.umich.edu"
 fi
 
 # Read in the port for game server
-echo "Enter game server port [default 30610]:"
+echo "Enter game server port [default 28610]:"
 read game_server_port
 if [ -z "$game_server_port" ]; then
-    game_server_port = "30610"
+    game_server_port="28610"
 fi
 
 # Read in the host for view server
-echo "Enter view server host [default pc5.genirack.nyu.edu]:"
+echo "Enter view server host [default pc4.instageni.research.umich.edu]:"
 read view_server_host
 if [ -z "$view_server_host" ]; then
-    view_server_host = "pc5.genirack.nyu.edu"
+    view_server_host="pc4.instageni.research.umich.edu"
 fi
 
 # Read in the port for view server
-echo "Enter view server port [default 30610]:"
+echo "Enter view server port [default 28610]:"
 read view_server_port
 if [ -z "$view_server_port" ]; then
-    view_server_port = "30610"
+    view_server_port="28610"
 fi
 
-# Read in the host for game client 1
-echo "Enter game client 1 host [default pc5.genirack.nyu.edu]:"
+# Get game client 1 host
+echo "Enter game client 1 host [default pc3.instageni.research.umich.edu]:"
 read game_client_1_host
 if [ -z "$game_client_1_host" ]; then
-    game_client_1_host = "pc5.genirack.nyu.edu"
+    game_client_1_host="pc3.instageni.research.umich.edu"
 fi
 
-# Read in the port for game client 1
-echo "Enter game client 1 port [default 30611]:"
+# Get game client 1 port
+echo "Enter game client 1 port [default 28610]:"
 read game_client_1_port
 if [ -z "$game_client_1_port" ]; then
-    game_client_1_port = "30611"
+    game_client_1_port="28610"
 fi
 
-# Read in the host for game client 2
-echo "Enter game client 2 host [default pc5.genirack.nyu.edu]:"
+# Get game client 2 host
+echo "Enter game client 2 host [default pc3.instageni.research.umich.edu]:"
 read game_client_2_host
 if [ -z "$game_client_2_host" ]; then
-    game_client_2_host = "pc5.genirack.nyu.edu"
+    game_client_2_host="pc3.instageni.research.umich.edu"
 fi
 
-# Read in the port for game client 2
-echo "Enter game client 2 port [default 30613]:"
+# Get game client 2 port
+echo "Enter game client 2 port [default 28611]:"
 read game_client_2_port
 if [ -z "$game_client_2_port" ]; then
-    game_client_2_port = "30613"
+    game_client_2_port="28611"
 fi
 
-# Read in the host for view client 1
-echo "Enter view client 1 host [default pc5.genirack.nyu.edu]:"
+# Get view client 1 host
+echo "Enter view client 1 host [default pc3.instageni.research.umich.edu]:"
 read view_client_1_host
 if [ -z "$view_client_1_host" ]; then
-    view_client_1_host = "pc5.genirack.nyu.edu"
+    view_client_1_host="pc3.instageni.research.umich.edu"
 fi
 
-# Read in the port for view client 1
-echo "Enter view client 1 port [default 30614]:"
+# Get view client 1 port
+echo "Enter view client 1 port [default 28613]:"
 read view_client_1_port
 if [ -z "$view_client_1_port" ]; then
-    view_client_1_port = "30614"
+    view_client_1_port="28613"
 fi
 
-# Read in the host for view client 2
-echo "Enter view client 2 host [default pc2.genirack.nyu.edu]:"
+# Get view client 2 host
+echo "Enter view client 2 host [default pc3.instageni.research.umich.edu]:"
 read view_client_2_host
 if [ -z "$view_client_2_host" ]; then
-    view_client_2_host = "pc2.genirack.nyu.edu"
+    view_client_2_host="pc3.instageni.research.umich.edu"
 fi
 
-# Read in the port for view client 2
-echo "Enter view client 2 port [default 30610]:"
+# Get view client 2 port
+echo "Enter view client 2 port [default 28614]:"
 read view_client_2_port
 if [ -z "$view_client_2_port" ]; then
-    view_client_2_port = "30610"
+    view_client_2_port="28614"
 fi
-
 
 echo "Installing Java on all machines..."
 echo "This may take a few minutes..."
@@ -146,40 +145,5 @@ ssh -o StrictHostKeychecking=no -i $private_key $username@$view_client_1_host -p
 ssh -o StrictHostKeychecking=no -i $private_key $username@$view_client_2_host -p $view_client_2_port "cd game; javac *.java" &
 wait
 echo "Done copying java files and compiled them to all machines."
-
-# Execute the set_congestion script based on which congestion they chose
-algo=""
-
-# Start a while loop
-while true; do
-  # Ask the user for input
-  read -p "Enter one of the options: reno, cubic, bbr: " option
-
-  # Check if the user entered one of the valid options
-  if [[ "$option" == "reno" ]]; then
-    # If the user entered "reno", set the value of the algo variable to "reno"
-    algo="reno"
-    break
-  elif [[ "$option" == "cubic" ]]; then
-    # If the user entered "cubic", set the value of the algo variable to "cubic"
-    algo="cubic"
-    break
-  elif [[ "$option" == "bbr" ]]; then
-    # If the user entered "bbr", set the value of the algo variable to "bbr"
-    algo="bbr"
-    break
-  else
-    # If the user didn't enter a valid option, print an error message
-    echo "Invalid option. Please try again."
-  fi
-done
-
-echo "Congestion control algorithm: $algo"
-ssh -o StrictHostKeychecking=no $username@$router_host -p $router_port sudo sysctl -w net.ipv4.tcp_congestion_control=$algo
-ssh -o StrictHostKeychecking=no $username@$game_server_host -p $game_server_port sudo sysctl -w net.ipv4.tcp_congestion_control=$algo
-ssh -o StrictHostKeychecking=no $username@$game_client_1_host -p $game_client_1_port sudo sysctl -w net.ipv4.tcp_congestion_control=$algo
-ssh -o StrictHostKeychecking=no $username@$game_client_2_host -p $game_client_1_port sudo sysctl -w net.ipv4.tcp_congestion_control=$algo
-ssh -o StrictHostKeychecking=no $username@$view_client_1_host -p $view_client_1_port sudo sysctl -w net.ipv4.tcp_congestion_control=$algo
-ssh -o StrictHostKeychecking=no $username@$view_client_2_host -p $view_client_2_port sudo sysctl -w net.ipv4.tcp_congestion_control=$algo
 
 echo "Setup complete!"
