@@ -38,3 +38,23 @@ ssh -i $private_key $username@pc2.genirack.nyu.edu -p 30610 "cd game; javac *.ja
 scp -i $private_key -P 30610 SimpleMultiplayerTTTGame/*.java $username@pc1.genirack.nyu.edu:~/game/ > /dev/null
 ssh -i $private_key $username@pc1.genirack.nyu.edu -p 30610 "cd game; javac *.java" > /dev/null
 echo "Done copying java files and compiled them to all machines."
+
+# Ask the user if they want to use reno, cubic, or bbr
+echo "Enter congestion control algorithm [reno, cubic, bbr]:"
+read congestion_control
+while [ "$congestion_control" != "reno" ] && [ "$congestion_control" != "cubic" ] && [ "$congestion_control" != "bbr" ]; then
+    echo "Invalid congestion control algorithm. Try again"
+    exit 1
+fi
+
+# Execute the set_congestion script based on which congestion they chose
+if [ "$congestion_control" = "reno" ]; then
+    chmod +x set_congestion_reno.sh
+    ./set_congestion_reno.sh
+elif [ "$congestion_control" = "cubic" ]; then
+    chmod +x set_congestion_cubic.sh
+    ./set_congestion_cubic.sh
+elif [ "$congestion_control" = "bbr" ]; then
+    chmod +x set_congestion_bbr.sh
+    ./set_congestion_bbr.sh
+fi
