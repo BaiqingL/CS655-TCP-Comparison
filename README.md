@@ -9,6 +9,11 @@ Execute the `init_machines.sh` script, which will install java, copy the files t
 
 ### Running the game:
 
+There are two methods to do this, either through an automated script or to do it manually. Recommendation is to run the script unless there are specific needs to tune the machines.
+
+#### Automated script:
+
+The script `run_game.sh` will run the game automatically. It will ask the user to input all hosts and ports of their machines corresponding to the functions the machines are providing. Ensure these are correct before proceeding. The script will then run the game servers, clients and view servers and clients automatically.
 
 First, run ViewServer and GameServer on their respective nodes:
 
