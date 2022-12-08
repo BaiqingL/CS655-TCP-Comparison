@@ -162,7 +162,12 @@ do
     ssh -i $private_key $username@$view_client_2_host -p $view_client_2_port "pkill -9 screen; screen -wipe; screen -d -m; screen -X stuff \"cd game; java ViewClient \\\"10.10.1.1\\\" 58001 Paul Alex Auto 30 500 \n\"" 
     echo "Starting experiment iteration $i"
     # Execute java ViewPerformance eth1 10 50 10 "viewPerf.txt" "10.10.1.1" 58001 Bob Auto 30 5000 on view client 1
-    ssh -i $private_key $username@$view_client_1_host -p $view_client_1_port "cd game; java ViewPerformance eth1 10 50 10 \"viewPerf.txt\" \"10.10.1.1\" 58001 Alex; killall -9 java"
+    output=$(ssh -i $private_key $username@$view_client_1_host -p $view_client_1_port "cd game; java ViewPerformance eth1 10 50 10 \"viewPerf.txt\" \"10.10.1.1\" 58001 Alex; python3 watcher.py; killall -9 java")
+    last_line=$(echo "$output" | tail -1)
+    echo "Last line: $last_line"
+    # Download $last_line as an url and save as viewPerf_{$i}_{$algo}.txt
+    wget -O viewPerf_${i}_${algo}.txt $last_line
+    
+    echo "Experiment iteration $i complete, copying results"
     # scp back /users/$username/game/viewPerf.txt to local machine
-    scp -i $private_key $username@$view_client_1_host:/users/$username/game/viewPerf.txt viewPerf_{$i}_{$algo}.txt
 done
