@@ -58,3 +58,11 @@ elif [ "$congestion_control" = "bbr" ]; then
     chmod +x set_congestion_bbr.sh
     ./set_congestion_bbr.sh
 fi
+
+# Start the game and view servers in their perspective machines
+# Game server address pc1.genirack.nyu.edu:30610
+# View server address pc2.genirack.nyu.edu:30610
+ssh -i $private_key $username@pc2.genirack.nyu.edu -p 30610 "pkill -9 screen; screen -d -m; screen -X stuff \"cd game&&java ViewServer 58001\n\"" > /dev/null
+
+# Start the game server
+ssh -i $private_key $username@pc1.genirack.nyu.edu -p 30610 "pkill -9 screen; screen -d -m; screen -X stuff \"cd game&&java 58000 \"10.10.1.1\" 58001\n\"" > /dev/null
