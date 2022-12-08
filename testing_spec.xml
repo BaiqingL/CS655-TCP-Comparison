@@ -50,7 +50,6 @@
 <sliver_type xmlns="http://www.geni.net/resources/rspec/3" name="default-vm"/>
 <services xmlns="http://www.geni.net/resources/rspec/3">
 
-<install xmlns="http://www.geni.net/resources/rspec/3"/>
 </services>
 <interface xmlns="http://www.geni.net/resources/rspec/3" client_id="interface-9"/>
 </node>
