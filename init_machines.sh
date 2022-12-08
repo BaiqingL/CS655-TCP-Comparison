@@ -182,8 +182,9 @@ ssh -o StrictHostKeychecking=no $username@$game_client_2_host -p $game_client_1_
 ssh -o StrictHostKeychecking=no $username@$view_client_1_host -p $view_client_1_port sudo sysctl -w net.ipv4.tcp_congestion_control=$algo
 ssh -o StrictHostKeychecking=no $username@$view_client_2_host -p $view_client_2_port sudo sysctl -w net.ipv4.tcp_congestion_control=$algo
 
-# Start the game and view servers in their perspective machines
+echo "Starting game server..."
 ssh -i $private_key $username@$game_server_host -p $game_server_port "pkill -9 screen; screen -d -m; screen -X stuff \"cd game; java ViewServer 58001\n\"" 
-
-# Start the game server
+echo "Game server started."
+echo "Starting view server..."
 ssh -i $private_key $username@$view_server_host -p $view_server_port "pkill -9 screen; screen -d -m; screen -X stuff \"cd game; java 58000 \"10.10.1.1\" 58001\n\"" 
+echo "View server started."
