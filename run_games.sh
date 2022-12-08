@@ -4,49 +4,49 @@ private_key="~/.ssh/id_rsa"
 echo "Enter path to private key [default ~/.ssh/id_rsa]:"
 read private_key_input
 if [ -n "$private_key_input" ]; then
-    private_key = "$private_key_input"
+    private_key="$private_key_input"
 fi
 
 # Read in the host for router
 echo "Enter router host [default pc3.instageni.research.umich.edu]:"
 read router_host
 if [ -z "$router_host" ]; then
-    router_host = "pc3.instageni.research.umich.edu"
+    router_host="pc3.instageni.research.umich.edu"
 fi
 
 # Read in the port for router
 echo "Enter router port [default 28612]:"
 read router_port
 if [ -z "$router_port" ]; then
-    router_port = "28612"
+    router_port="28612"
 fi
 
 # Read in the host for game server
 echo "Enter game server host [default pc1.instageni.research.umich.edu]:"
 read game_server_host
 if [ -z "$game_server_host" ]; then
-    game_server_host = "pc1.instageni.research.umich.edu"
+    game_server_host="pc1.instageni.research.umich.edu"
 fi
 
 # Read in the port for game server
 echo "Enter game server port [default 28610]:"
 read game_server_port
 if [ -z "$game_server_port" ]; then
-    game_server_port = "28610"
+    game_server_port="28610"
 fi
 
 # Read in the host for view server
 echo "Enter view server host [default pc4.instageni.research.umich.edu]:"
 read view_server_host
 if [ -z "$view_server_host" ]; then
-    view_server_host = "pc4.instageni.research.umich.edu"
+    view_server_host="pc4.instageni.research.umich.edu"
 fi
 
 # Read in the port for view server
 echo "Enter view server port [default 28610]:"
 read view_server_port
 if [ -z "$view_server_port" ]; then
-    view_server_port = "28610"
+    view_server_port="28610"
 fi
 
 # Get game client 1 host
