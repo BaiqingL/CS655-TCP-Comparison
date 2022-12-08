@@ -5,7 +5,7 @@ Create your slice using the Rspec
 A list of commands below used to prepare and run test on a slice
 for your reference (note: parameters in scp for your slice will be different)
 
-Execute the `init_machines.sh` script, which will install java, copy the files to the machines, and set the correct congestion algorithm. The script will ask the user to input all hosts and ports of their machines corresponding to the functions the machines are providing. Ensure these are correct before proceeding. It will also ask for a desired congestion control algorithm to be used.
+Execute the `init_machines.sh` script, which will install java, copy the files to the machines, and set the correct congestion algorithm. The script will ask the user to input all hosts and ports of their machines corresponding to the functions the machines are providing. Ensure these are correct before proceeding. It will also ask for a desired congestion control algorithm to be used. The script will also start the game and view servers after setup.
 
 ### Running the game:
 
@@ -13,7 +13,7 @@ There are two methods to do this, either through an automated script or to do it
 
 #### Automated script:
 
-The script `run_game.sh` will run the game automatically. It will ask the user to input all hosts and ports of their machines corresponding to the functions the machines are providing. Ensure these are correct before proceeding. The script will then run the game servers, clients and view servers and clients automatically.
+The script `run_game.sh` will run the game automatically. It will ask the user to input all hosts and ports of their machines corresponding to the functions the machines are providing. Ensure these are correct before proceeding. The script will then run the game and view clients automatically.
 
 First, run ViewServer and GameServer on their respective nodes:
 
