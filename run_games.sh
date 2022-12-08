@@ -159,10 +159,10 @@ do
     echo "Clean view client 1..."
     ssh -i $private_key $username@$view_client_1_host -p $view_client_1_port "killall -9 java"
     echo "Start view client 2..."
-    ssh -i $private_key $username@$view_client_2_host -p $view_client_2_port "pkill -9 screen; screen -wipe; screen -d -m; screen -X stuff \"cd game; java ViewClient \"10.10.1.1\" 58001 Paul Bob Auto 30 500 \n\"" 
+    ssh -i $private_key $username@$view_client_2_host -p $view_client_2_port "pkill -9 screen; screen -wipe; screen -d -m; screen -X stuff \"cd game; java ViewClient \"10.10.1.1\" 58001 Paul Alex Auto 30 500 \n\"" 
     echo "Starting experiment iteration $i"
     # Execute java ViewPerformance eth1 10 50 10 "viewPerf.txt" "10.10.1.1" 58001 Bob Auto 30 5000 on view client 1
-    ssh -i $private_key $username@$view_client_1_host -p $view_client_1_port "cd game; java ViewPerformance eth1 10 50 10 \"viewPerf.txt\" \"10.10.1.1\" 58001 Bob Auto 30 5000; killall -9 java"
+    ssh -i $private_key $username@$view_client_1_host -p $view_client_1_port "cd game; java ViewPerformance eth1 10 50 10 \"viewPerf.txt\" \"10.10.1.1\" 58001 Alex Auto 30 5000; killall -9 java"
     # scp back /users/$username/game/viewPerf.txt to local machine
     scp -i $private_key $username@$view_client_1_host:/users/$username/game/viewPerf.txt viewPerf_{$i}_{$algo}.txt
 done
