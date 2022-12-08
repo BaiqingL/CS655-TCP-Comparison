@@ -108,6 +108,7 @@ fi
 echo "Installing Java on all machines..."
 echo "This may take a few minutes..."
 
+# SSH to the machines, install Java, and create a game directory
 echo "Installing Java on game server..."
 ssh -o StrictHostKeychecking=no -i $private_key $username@$game_server_host -p $game_server_port "echo 'debconf debconf/frontend select Noninteractive' | sudo debconf-set-selections; sudo apt-get update -y; sudo apt-get install openjdk-11-jdk-headless -y; mkdir game" &
 wait
@@ -137,6 +138,7 @@ scp -i $private_key -P $view_client_2_port SimpleMultiplayerTTTGame/*.java $user
 wait
 echo "Done copying java files to all machines."
 echo "Compiling java files on all machines..."
+# Compile all java files on the machines
 ssh -o StrictHostKeychecking=no -i $private_key $username@$game_server_host -p $game_server_port  "cd game; javac *.java" &
 ssh -o StrictHostKeychecking=no -i $private_key $username@$view_server_host -p $view_server_port "cd game; javac *.java" &
 ssh -o StrictHostKeychecking=no -i $private_key $username@$game_client_1_host -p $game_client_1_port "cd game; javac *.java" &

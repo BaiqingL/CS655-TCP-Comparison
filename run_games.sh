@@ -143,6 +143,7 @@ echo "Starting experiment..."
 
 for i in {1..10}
 do
+    # Create process in screens and then detatch from them, clean up previous screens if they exist and havent been properlly closed from a previous run
     echo "Starting view server..."
     ssh -i $private_key $username@$view_server_host -p $view_server_port "pkill -9 screen; screen -wipe; screen -d -m; screen -X stuff \"cd game; java ViewServer 58001\n\"" 
     echo "View server started."
@@ -161,6 +162,7 @@ do
     echo "Start view client 2..."
     ssh -i $private_key $username@$view_client_2_host -p $view_client_2_port "pkill -9 screen; screen -wipe; screen -d -m; screen -X stuff \"cd game; java ViewClient \\\"10.10.1.1\\\" 58001 Paul Alex Auto 30 500 \n\"" 
     echo "Starting experiment iteration $i"
+    # Save the output of the view client 1 command to a variable, since the last line is the link to the file we want to download
     output=$(ssh -i $private_key $username@$view_client_1_host -p $view_client_1_port "cd game; java ViewPerformance eth1 10 100 10 \"viewPerf.txt\" \"10.10.1.1\" 58001 Alex; python3 watcher.py; killall -9 java")
     last_line=$(echo "$output" | tail -1)
     echo "Last line: $last_line"
@@ -168,7 +170,7 @@ do
     wget -O data/viewPerf_${i}_${algo}.txt $last_line
     echo "Experiment iteration $i complete"
 
-
+    # Start cleanup
     echo "Cleaning view server..."
     ssh -i $private_key $username@$view_server_host -p $view_server_port "pkill -9 screen; screen -wipe" 
     echo "Cleaning game server..."

@@ -105,7 +105,7 @@ if [ -z "$view_client_2_port" ]; then
     view_client_2_port="28614"
 fi
 
-
+# Clean up
 echo "Cleaning view server..."
 ssh -i $private_key $username@$view_server_host -p $view_server_port "pkill -9 screen; screen -wipe" 
 echo "Cleaning game server..."
