@@ -8,8 +8,8 @@ import java.util.*;
 public class ViewServer {
     // Maintain list of all view client sockets for broadcast
     public ViewStage[] viewStages;
-    public static final int MAX_NUMBER_OF_GAMES = 50;
-    public static final int MAX_NUMBER_OF_VIEWERS = 100;
+    public static final int MAX_NUMBER_OF_GAMES = 30;
+    public static final int MAX_NUMBER_OF_VIEWERS = 5000;
 
     public ViewServer() {
         this.viewStages = new ViewStage[MAX_NUMBER_OF_GAMES];
@@ -18,7 +18,7 @@ public class ViewServer {
         }
     }
 
-    // get the index of the game being played by playerName
+    // get the index of the game being plaued by playerName   
     public int getGameIndex(String playerName) {
         for (int i = 0; i < MAX_NUMBER_OF_GAMES; i++) {
             if (this.viewStages[i].players[0].equals(playerName) ||
@@ -29,7 +29,7 @@ public class ViewServer {
         return -1;
     }
 
-    // add viewer to the game being played by playerName
+    // add viewer to the game being plaued by playerName   
     // return: gameIndex, playerIndex, viewerIndex
     public int[] addViewerToGame(String playerName, String viewerName, Socket viewSock) {
         int[] indexes = {-1, -1, -1};
@@ -82,7 +82,7 @@ public class ViewServer {
                 if (line.startsWith(viewerInfoTag)) {
                     viewerInfoReceived = line.substring(viewerInfoTag.length());
 
-                    // viewer info: viewerName, playerName
+                    // viewer info: viewerName, playerName,
                     String[] lines = viewerInfoReceived.split(",");
                     String viewerName = lines[0];
                     String playerName = lines[1];
@@ -104,7 +104,7 @@ public class ViewServer {
                 else if (line.startsWith(playerInfoTag)) {
                     playerInfoReceived = line.substring(playerInfoTag.length());
 
-                    // player info: gameIndex, playerIndex, playerName, playerID
+                    // player info: gameIndex, playerIndex, playerName, playerID,
                     String[] lines = playerInfoReceived.split(",");
                     int gameIndex = Integer.parseInt(lines[0]);
                     int playerIndex = Integer.parseInt(lines[1]);

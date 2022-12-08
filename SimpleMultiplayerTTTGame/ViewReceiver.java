@@ -4,12 +4,15 @@ import java.net.*;
 import java.io.*;
 import java.util.*;
 import java.lang.*;
+import java.nio.*;
+//import java.nio.channels.FileChannel;
+import java.nio.channels.FileLock;
 
 public class ViewReceiver implements Runnable {
     private Socket conSock = null;
     public TTTgame game;
     public int warningCount;
-    public static final long DELAY_ACCEPTABLE = 500; // 0.5 second
+    public static final long DELAY_ACCEPTABLE = 300; // 0.3 second
     public static final String DELAY_UNACCEPTABLE_WARNING = "????? BROADCAST QUALITY NOT ACCEPTABLE ?????";
     public static final String WARNING_FILE = "viewerWarning.txt";
 
@@ -28,9 +31,12 @@ public class ViewReceiver implements Runnable {
 
             boolean commentGeneratorStarted = false;
             int[] parameters = {0, 0}; // length, interval
+            long adjustTime = 0;
+            boolean timeAdjusted = false;
+            long timeSent = 0;
 
             while (true) {
-                if (inputFromServer == null) {
+                if (inputFromServer == null || outputToServer == null) {
                     // Connection issue
                     System.out.println("Closing connection for socket " + conSock);
                     conSock.close();
@@ -40,6 +46,17 @@ public class ViewReceiver implements Runnable {
                 String textFromServer = inputFromServer.readLine();
 
                 //System.out.println("ViewReceiver: " + textFromServer);
+                if (textFromServer.startsWith("Time ")) {
+                    long currentTime = System.currentTimeMillis();
+                    long broadcastDelay = (currentTime - timeSent) / 2;
+                    System.out.println("Game broadcast delay: " + broadcastDelay);
+                    if (broadcastDelay > DELAY_ACCEPTABLE) { // delay not acceptable
+                        System.out.println(DELAY_UNACCEPTABLE_WARNING);
+                        this.warningCount++;
+                        writeWarningToFile();
+                        //writeWarningToFileWithLock();
+                    }
+                }
 
                 if (textFromServer.startsWith("X#") || textFromServer.startsWith("O#")) {
                     // get time stamp and compute network delay for broadcast
@@ -51,13 +68,27 @@ public class ViewReceiver implements Runnable {
                     long currentTime = System.currentTimeMillis();
                     //System.out.println("Before printBoard: " + textFromServer.substring(4+lines[0].length()) );
                     this.game.printBoard(textFromServer.substring(4 + lines[0].length()));
-                    long broadcastDelay = currentTime - timeStamp;
-                    System.out.println("Game broadcast delay: " + broadcastDelay);
-                    if (broadcastDelay > DELAY_ACCEPTABLE) { // delay not acceptable
-                        System.out.println(DELAY_UNACCEPTABLE_WARNING);
-                        this.warningCount++;
-                        writeWarningToFile();
-                    }
+
+                    outputToServer.writeBytes("Time \n");
+                    timeSent = currentTime;
+
+                    //long broadcastDelay = currentTime - timeStamp;
+                    // System.out.println("Raw Game broadcast delay: " + broadcastDelay);
+                    //broadcastDelay -= adjustTime;
+                    //if (broadcastDelay < 0 || broadcastDelay > 10*DELAY_ACCEPTABLE) {
+                    //    if (timeAdjusted) {
+                    //        System.out.println("MUST SYNCHRONIZE TIME AMONG NODES");
+                    //    }
+                    //    adjustTime = broadcastDelay - 1;
+                    //    broadcastDelay = 1;
+                    //    timeAdjusted = true;
+                    // }
+                    //System.out.println("Game broadcast delay: " + broadcastDelay);
+                    //if (broadcastDelay > DELAY_ACCEPTABLE) { // delay not acceptable
+                    //    System.out.println(DELAY_UNACCEPTABLE_WARNING);
+                    //    this.warningCount++;
+                    //    writeWarningToFileWithLock();
+                    //}
                 }
                 else if (textFromServer.startsWith("quit")) {
                     inputFromServer.close();
@@ -103,6 +134,43 @@ public class ViewReceiver implements Runnable {
             System.out.println("Error: " + e.toString());
         }
     }
+
+    public void writeWarningToFileWithLock() {
+        File warningFile = new File(WARNING_FILE);
+        try {
+            RandomAccessFile filerw = new RandomAccessFile(warningFile, "rw");
+            FileLock lock = filerw.getChannel().lock();
+
+            String warningLine = DELAY_UNACCEPTABLE_WARNING + " " + this.warningCount + "(times)\n";
+            filerw.seek(0);
+            filerw.write(warningLine.getBytes());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+//    public void writeWarningToFileWithLock2() {
+//        try (FileOutputStream fileOutputStream = new FileOutputStream("AAA"+WARNING_FILE);
+//             FileChannel channel = fileOutputStream.getChannel();
+//             FileLock lock = channel.lock()) { 
+    // write to the channel
+//             String warningLine = DELAY_UNACCEPTABLE_WARNING + " " + this.warningCount + "(times)\n";
+    //channel.write(warningLine.getBytes());
+//        } catch (IOException | InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//    }
+
+//    public void writeFileWithLock(File file, String content) {
+//        try (RandomAccessFile reader = new RandomAccessFile(file, "rw");
+//             FileLock lock = reader.getChannel().lock()) {
+
+//            reader.write(content.getBytes());
+//        } catch (IOException | InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//    }  
 
     public void writeWarningToFile() {
         File warningFile = new File(WARNING_FILE);

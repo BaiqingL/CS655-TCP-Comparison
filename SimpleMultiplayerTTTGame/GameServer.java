@@ -41,7 +41,7 @@ public class GameServer {
                     this.gameStages[i].playerSockets[j] = conSock; // Add this socket to the list
                     this.gameStages[i].playerIDs[j] = playerID;
 
-                    System.out.println("Player " + Integer.toString(j+1) + " connected.");
+                    System.out.println("Player " + Integer.toString(j + 1) + " connected.");
 
                     GameHandler handler = new GameHandler(i, j, gameStages); // game i and player j
                     Thread theThread = new Thread(handler);
@@ -50,7 +50,7 @@ public class GameServer {
 
                 }
 
-                System.out.println("Game " + Integer.toString(i+1) + " running...");
+                System.out.println("Game " + Integer.toString(i + 1) + " running...");
             }
 
         } catch (IOException e) {
@@ -73,7 +73,8 @@ public class GameServer {
                 System.err.println("Argument" + args[0] + " must be an unsigned number.");
                 System.exit(1);
             }
-        } else {
+        }
+        else {
             System.err.println("Usage: java GameServer <port> <viewServer> <viewPort>");
             System.exit(1);
         }

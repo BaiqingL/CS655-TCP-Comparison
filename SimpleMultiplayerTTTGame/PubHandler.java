@@ -46,7 +46,7 @@ public class PubHandler implements Runnable {
                 // Get data sent from the player
                 String textFromPublisher = inputFromPublisher.readLine();
                 // System.out.println("PubHandler received: " + textFromPublisher);
-                // broardcast it to viewers
+                // broadcast it to viewers
                 broadcastMessage(textFromPublisher + "\n");
 
                 if (textFromPublisher.equals("quit")) {

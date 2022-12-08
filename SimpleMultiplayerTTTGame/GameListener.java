@@ -18,7 +18,7 @@ public class GameListener implements Runnable {
     }
 
     public void run() {
-        // Wait for data from the server.  If received, output it
+        // Wait for data from the server.  If received, output it.
         try {
             BufferedReader inputFromServer = new BufferedReader(new InputStreamReader(conSock.getInputStream()));
             DataOutputStream outputToServer = new DataOutputStream(conSock.getOutputStream());
@@ -91,12 +91,12 @@ public class GameListener implements Runnable {
 //                       Thread.sleep(interval); 
                     }
                 }
-            }
+            } // while
         } catch (Exception e) {
             System.out.println("Error: " + e.toString());
-        }
+        }  // try
 
-    }
+    } // run()
 
     public int[] randomMove(int[][] intBoard) {
         int numberOfPossibleMoves = 0;
@@ -127,4 +127,4 @@ public class GameListener implements Runnable {
         return move; 
     }
 
-}
+} // Game Listener for Game Client
