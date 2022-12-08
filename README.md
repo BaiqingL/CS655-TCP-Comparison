@@ -14,7 +14,9 @@ The script `run_game.sh` will run the game automatically. It will ask the user t
 If for some reason the script does not work, run the `clean_up.sh` command to clean up the machines before running the experiment again.
 
 Also, you can run the commands manually for whatever reason needed.
+---
 
+#### Manual commands:
 First, run ViewServer and GameServer on their respective nodes:
 
 ```
