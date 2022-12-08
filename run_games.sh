@@ -166,7 +166,7 @@ do
     last_line=$(echo "$output" | tail -1)
     echo "Last line: $last_line"
     # Download $last_line as an url and save as viewPerf_{$i}_{$algo}.txt
-    wget -O viewPerf_${i}_${algo}.txt $last_line
+    wget -O data/viewPerf_${i}_${algo}.txt $last_line
     echo "Experiment iteration $i complete"
 
 
