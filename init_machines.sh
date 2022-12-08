@@ -127,24 +127,22 @@ ssh -o StrictHostKeychecking=no -i $private_key $username@$view_client_2_host -p
 wait
 echo "Done installing Java on all machines."
 
-echo "Copying java files and compiling to all machines..."
+echo "Copying java files to all machines..."
 # Copy all java files in SimpleMultiplayerTTTGame to the machine's ~/game/ directory, then compile them
 scp -i $private_key -P $game_server_port SimpleMultiplayerTTTGame/*.java $username@$game_server_host:~/game/ &
-ssh -o StrictHostKeychecking=no -i $private_key $username@$game_server_host -p $game_server_port  "cd game; javac *.java" &
-
 scp -i $private_key -P $view_server_port SimpleMultiplayerTTTGame/*.java $username@$view_server_host:~/game/ &
-ssh -o StrictHostKeychecking=no -i $private_key $username@$view_server_host -p $view_server_port "cd game; javac *.java" &
-
 scp -i $private_key -P $game_client_1_port SimpleMultiplayerTTTGame/*.java $username@$game_client_1_host:~/game/ &
-ssh -o StrictHostKeychecking=no -i $private_key $username@$game_client_1_host -p $game_client_1_port "cd game; javac *.java" &
-
 scp -i $private_key -P $game_client_2_port SimpleMultiplayerTTTGame/*.java $username@$game_client_2_host:~/game/ &
-ssh -o StrictHostKeychecking=no -i $private_key $username@$game_client_2_host -p $game_client_2_port "cd game; javac *.java" &
-
 scp -i $private_key -P $view_client_1_port SimpleMultiplayerTTTGame/*.java $username@$view_client_1_host:~/game/ &
-ssh -o StrictHostKeychecking=no -i $private_key $username@$view_client_1_host -p $view_client_1_port "cd game; javac *.java" &
-
 scp -i $private_key -P $view_client_2_port SimpleMultiplayerTTTGame/*.java $username@$view_client_2_host:~/game/ &
+wait
+echo "Done copying java files to all machines."
+echo "Compiling java files on all machines..."
+ssh -o StrictHostKeychecking=no -i $private_key $username@$game_server_host -p $game_server_port  "cd game; javac *.java" &
+ssh -o StrictHostKeychecking=no -i $private_key $username@$view_server_host -p $view_server_port "cd game; javac *.java" &
+ssh -o StrictHostKeychecking=no -i $private_key $username@$game_client_1_host -p $game_client_1_port "cd game; javac *.java" &
+ssh -o StrictHostKeychecking=no -i $private_key $username@$game_client_2_host -p $game_client_2_port "cd game; javac *.java" &
+ssh -o StrictHostKeychecking=no -i $private_key $username@$view_client_1_host -p $view_client_1_port "cd game; javac *.java" &
 ssh -o StrictHostKeychecking=no -i $private_key $username@$view_client_2_host -p $view_client_2_port "cd game; javac *.java" &
 wait
 echo "Done copying java files and compiled them to all machines."
@@ -177,12 +175,12 @@ while true; do
 done
 
 echo "Congestion control algorithm: $algo"
-ssh $username@$router_host -p $router_port sudo sysctl -w net.ipv4.tcp_congestion_control=$algo
-ssh $username@$game_server_host -p $game_server_port sudo sysctl -w net.ipv4.tcp_congestion_control=$algo
-ssh $username@$game_client_1_host -p $game_client_1_port sudo sysctl -w net.ipv4.tcp_congestion_control=$algo
-ssh $username@$game_client_2_host -p $game_client_1_port sudo sysctl -w net.ipv4.tcp_congestion_control=$algo
-ssh $username@$view_client_1_host -p $view_client_1_port sudo sysctl -w net.ipv4.tcp_congestion_control=$algo
-ssh $username@$view_client_2_host -p $view_client_2_port sudo sysctl -w net.ipv4.tcp_congestion_control=$algo
+ssh -o StrictHostKeychecking=no $username@$router_host -p $router_port sudo sysctl -w net.ipv4.tcp_congestion_control=$algo
+ssh -o StrictHostKeychecking=no $username@$game_server_host -p $game_server_port sudo sysctl -w net.ipv4.tcp_congestion_control=$algo
+ssh -o StrictHostKeychecking=no $username@$game_client_1_host -p $game_client_1_port sudo sysctl -w net.ipv4.tcp_congestion_control=$algo
+ssh -o StrictHostKeychecking=no $username@$game_client_2_host -p $game_client_1_port sudo sysctl -w net.ipv4.tcp_congestion_control=$algo
+ssh -o StrictHostKeychecking=no $username@$view_client_1_host -p $view_client_1_port sudo sysctl -w net.ipv4.tcp_congestion_control=$algo
+ssh -o StrictHostKeychecking=no $username@$view_client_2_host -p $view_client_2_port sudo sysctl -w net.ipv4.tcp_congestion_control=$algo
 
 # Start the game and view servers in their perspective machines
 ssh -i $private_key $username@$game_server_host -p $game_server_port "pkill -9 screen; screen -d -m; screen -X stuff \"cd game; java ViewServer 58001\n\"" 
