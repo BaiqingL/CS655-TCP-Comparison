@@ -157,7 +157,7 @@ elif [ "$congestion_control" = "bbr" ]; then
 fi
 
 # Start the game and view servers in their perspective machines
-ssh -i $private_key $username@$game_server_host -p $game_server_port "pkill -9 screen; screen -d -m; screen -X stuff \"cd game&&java ViewServer 58001\n\"" > /dev/null
+ssh -i $private_key $username@$game_server_host -p $game_server_port "pkill -9 screen; screen -d -m; screen -X stuff \"cd game; java ViewServer 58001\n\"" > /dev/null
 
 # Start the game server
-ssh -i $private_key $username@$view_server_host -p $view_server_port "pkill -9 screen; screen -d -m; screen -X stuff \"cd game&&java 58000 \"10.10.1.1\" 58001\n\"" > /dev/null
+ssh -i $private_key $username@$view_server_host -p $view_server_port "pkill -9 screen; screen -d -m; screen -X stuff \"cd game; java 58000 \"10.10.1.1\" 58001\n\"" > /dev/null
