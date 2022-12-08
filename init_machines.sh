@@ -109,17 +109,20 @@ fi
 echo "Installing Java on all machines..."
 echo "This may take a few minutes..."
 
-echo "Installing Java on router..."
-ssh -o StrictHostKeychecking=no -i $private_key $username@$game_server_host -p $game_server_port "echo 'debconf debconf/frontend select Noninteractive' | sudo debconf-set-selections; sudo apt-get update -y; sudo apt-get install openjdk-11-jdk-headless -y; mkdir game" &
 echo "Installing Java on game server..."
-ssh -o StrictHostKeychecking=no -i $private_key $username@$view_server_host -p $view_server_port "echo 'debconf debconf/frontend select Noninteractive' | sudo debconf-set-selections; sudo apt-get update -y; sudo apt-get install openjdk-11-jdk-headless -y; mkdir game" &
+ssh -o StrictHostKeychecking=no -i $private_key $username@$game_server_host -p $game_server_port "echo 'debconf debconf/frontend select Noninteractive' | sudo debconf-set-selections; sudo apt-get update -y; sudo apt-get install openjdk-11-jdk-headless -y; mkdir game" &
+wait
 echo "Installing Java on view server..."
-ssh -o StrictHostKeychecking=no -i $private_key $username@$game_client_1_host -p $game_client_1_port "echo 'debconf debconf/frontend select Noninteractive' | sudo debconf-set-selections; sudo apt-get update -y; sudo apt-get install openjdk-11-jdk-headless -y; mkdir game" &
+ssh -o StrictHostKeychecking=no -i $private_key $username@$view_server_host -p $view_server_port "echo 'debconf debconf/frontend select Noninteractive' | sudo debconf-set-selections; sudo apt-get update -y; sudo apt-get install openjdk-11-jdk-headless -y; mkdir game" &
 echo "Installing Java on game client 1..."
-ssh -o StrictHostKeychecking=no -i $private_key $username@$game_client_2_host -p $game_client_2_port "echo 'debconf debconf/frontend select Noninteractive' | sudo debconf-set-selections; sudo apt-get update -y; sudo apt-get install openjdk-11-jdk-headless -y; mkdir game" &
+ssh -o StrictHostKeychecking=no -i $private_key $username@$game_client_1_host -p $game_client_1_port "echo 'debconf debconf/frontend select Noninteractive' | sudo debconf-set-selections; sudo apt-get update -y; sudo apt-get install openjdk-11-jdk-headless -y; mkdir game" &
+wait
 echo "Installing Java on game client 2..."
-ssh -o StrictHostKeychecking=no -i $private_key $username@$view_client_1_host -p $view_client_1_port "echo 'debconf debconf/frontend select Noninteractive' | sudo debconf-set-selections; sudo apt-get update -y; sudo apt-get install openjdk-11-jdk-headless -y; mkdir game" &
+ssh -o StrictHostKeychecking=no -i $private_key $username@$game_client_2_host -p $game_client_2_port "echo 'debconf debconf/frontend select Noninteractive' | sudo debconf-set-selections; sudo apt-get update -y; sudo apt-get install openjdk-11-jdk-headless -y; mkdir game" &
 echo "Installing Java on view client 1..."
+ssh -o StrictHostKeychecking=no -i $private_key $username@$view_client_1_host -p $view_client_1_port "echo 'debconf debconf/frontend select Noninteractive' | sudo debconf-set-selections; sudo apt-get update -y; sudo apt-get install openjdk-11-jdk-headless -y; mkdir game" &
+wait
+echo "Installing Java on view client 2..."
 ssh -o StrictHostKeychecking=no -i $private_key $username@$view_client_2_host -p $view_client_2_port "echo 'debconf debconf/frontend select Noninteractive' | sudo debconf-set-selections; sudo apt-get update -y; sudo apt-get install openjdk-11-jdk-headless -y; mkdir game" &
 wait
 echo "Done installing Java on all machines."
