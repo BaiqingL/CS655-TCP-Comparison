@@ -5,36 +5,9 @@ Create your slice using the Rspec
 A list of commands below used to prepare and run test on a slice
 for your reference (note: parameters in scp for your slice will be different)
 
-```
-// install java on 6 hosts of the slice
-sudo apt update
-sudo apt install default-jdk
+First, configure the ports within the `init_machines.sh` file to accurate reflect the ports you want to use. 
 
-mkdir game
-cd game
-```
-
-For copying the game java files to slice test-slice:
-
-```
-// copy to ViewServer
-scp -i id_geni_ssh_rsa -P 30610 *.java richchen@pc2.genirack.nyu.edu:~/game/
-// copy to GameClient2
-scp -i id_geni_ssh_rsa -P 30611 *.java richchen@pc5.genirack.nyu.edu:~/game/
-// copy to GameServer
-scp -i id_geni_ssh_rsa -P 30610 *.java richchen@pc1.genirack.nyu.edu:~/game/
-// copy to  GameClient1
-scp -i id_geni_ssh_rsa -P 30610 *.java richchen@pc5.genirack.nyu.edu:~/game/
-// copy to ViewClient1
-scp -i id_geni_ssh_rsa -P 30613 *.java richchen@pc5.genirack.nyu.edu:~/game/
-// copy to ViewClient2
-scp -i id_geni_ssh_rsa -P 30614 *.java richchen@pc5.genirack.nyu.edu:~/game/
-```
-
-
-Compile 
-
-`javac *.java`
+Then, just simply execute the `init_machines.sh` script, which will install java, copy the files to the machines, and set the correct congestion algorithm. 
 
 
 
