@@ -14,7 +14,8 @@ cd game
 
 For copying the game java files to slice test-slice:
 
-`// copy to ViewServer
+`
+// copy to ViewServer
 scp -i id_geni_ssh_rsa -P 30610 *.java richchen@pc2.genirack.nyu.edu:~/game/
 // copy to GameClient2
 scp -i id_geni_ssh_rsa -P 30611 *.java richchen@pc5.genirack.nyu.edu:~/game/
